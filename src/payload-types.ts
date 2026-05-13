@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    recipes: Recipe;
+    products: Product;
+    ingredients: Ingredient;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,13 +81,16 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    recipes: RecipesSelect<false> | RecipesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    ingredients: IngredientsSelect<false> | IngredientsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -122,7 +128,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,7 +153,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -163,10 +169,143 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "recipes".
+ */
+export interface Recipe {
+  id: number;
+  title?: string | null;
+  title_th?: string | null;
+  image?: (number | null) | Media;
+  method?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  type?: ('master' | 'sub') | null;
+  ingredients?:
+    | {
+        product: number | Product;
+        quantity: string;
+        id?: string | null;
+      }[]
+    | null;
+  otherIngredients?:
+    | {
+        subIngredient: number | Ingredient;
+        quantity: string;
+        id?: string | null;
+      }[]
+    | null;
+  subRecipes?:
+    | {
+        recipe: number | Recipe;
+        quantity: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  title?: string | null;
+  firebaseId: string;
+  sku?:
+    | {
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  name?: string | null;
+  name_th?: string | null;
+  unit?:
+    | {
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  price?:
+    | {
+        value?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  cat?: string | null;
+  tag?: string | null;
+  image?: string | null;
+  visibility?: ('public' | 'private' | 'trash') | null;
+  size?: string | null;
+  color_emarket?: string | null;
+  desc_emarket?: string | null;
+  slogan?: string | null;
+  image_fruit?: string | null;
+  emkt_offsetLeft?: string | null;
+  offset_thumb_size?: string | null;
+  color_bg?: string | null;
+  color_primary?: string | null;
+  color_secondary?: string | null;
+  emkt_scale?: string | null;
+  freezing_temp?: string | null;
+  emkt_size?: string | null;
+  refrigerate_time?: string | null;
+  offset_thumb_top?: string | null;
+  freezing_time?: string | null;
+  instruction?: string | null;
+  refrigerate_temp?: string | null;
+  emkt_flavor?: string | null;
+  emkt_fruit_scale?: string | null;
+  image_emarket?: string | null;
+  image_app?: string | null;
+  emkt_weight?: string | null;
+  catalog?: boolean | null;
+  servingsPerUnit?: string | null;
+  emkt_promo?: string | null;
+  desc_th?: string | null;
+  ex_weight?: string | null;
+  ex_qty?: string | null;
+  desc_en2?: string | null;
+  emkt_title?: string | null;
+  emkt_show_promo?: boolean | null;
+  ex_weight_total?: string | null;
+  enlarge?: boolean | null;
+  desc_th2?: string | null;
+  emkt_offsetTop?: string | null;
+  desc?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ingredients".
+ */
+export interface Ingredient {
+  id: number;
+  title?: string | null;
+  cost: number;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +322,32 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'recipes';
+        value: number | Recipe;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'ingredients';
+        value: number | Ingredient;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +357,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +380,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -274,6 +425,122 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "recipes_select".
+ */
+export interface RecipesSelect<T extends boolean = true> {
+  title?: T;
+  title_th?: T;
+  image?: T;
+  method?: T;
+  type?: T;
+  ingredients?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  otherIngredients?:
+    | T
+    | {
+        subIngredient?: T;
+        quantity?: T;
+        id?: T;
+      };
+  subRecipes?:
+    | T
+    | {
+        recipe?: T;
+        quantity?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  firebaseId?: T;
+  sku?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  name?: T;
+  name_th?: T;
+  unit?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  price?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  cat?: T;
+  tag?: T;
+  image?: T;
+  visibility?: T;
+  size?: T;
+  color_emarket?: T;
+  desc_emarket?: T;
+  slogan?: T;
+  image_fruit?: T;
+  emkt_offsetLeft?: T;
+  offset_thumb_size?: T;
+  color_bg?: T;
+  color_primary?: T;
+  color_secondary?: T;
+  emkt_scale?: T;
+  freezing_temp?: T;
+  emkt_size?: T;
+  refrigerate_time?: T;
+  offset_thumb_top?: T;
+  freezing_time?: T;
+  instruction?: T;
+  refrigerate_temp?: T;
+  emkt_flavor?: T;
+  emkt_fruit_scale?: T;
+  image_emarket?: T;
+  image_app?: T;
+  emkt_weight?: T;
+  catalog?: T;
+  servingsPerUnit?: T;
+  emkt_promo?: T;
+  desc_th?: T;
+  ex_weight?: T;
+  ex_qty?: T;
+  desc_en2?: T;
+  emkt_title?: T;
+  emkt_show_promo?: T;
+  ex_weight_total?: T;
+  enlarge?: T;
+  desc_th2?: T;
+  emkt_offsetTop?: T;
+  desc?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ingredients_select".
+ */
+export interface IngredientsSelect<T extends boolean = true> {
+  title?: T;
+  cost?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
