@@ -28,6 +28,9 @@ const CardRoot = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2),
     background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))',
     pointerEvents: 'none',
+    a: {
+      pointerEvents: 'auto',
+    },
   },
   '& .image': {
     transition: 'transform 0.3s ease',
