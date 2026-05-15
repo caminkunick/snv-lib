@@ -4,6 +4,9 @@ import { headers as getHeaders } from 'next/headers.js'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { Recipe } from '@/libs/recipes'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import { Table, TableRowData } from './table'
 
 const PageRecipe = async ({ params }: { params: { id: string } }) => {
   const { id } = await params
@@ -27,10 +30,26 @@ const PageRecipe = async ({ params }: { params: { id: string } }) => {
       console.error('Error fetching recipe:', err)
       return null
     })
+  const content = recipe?.method as unknown as SerializedEditorState
 
   return (
     <div>
       <h1>{recipe?.title}</h1>
+      {/* <pre>{JSON.stringify(recipe?.method, null, 2)}</pre> */}
+      <RichText data={content} />
+      <Table
+        rows={([] as TableRowData[]).concat(
+          recipe?.ingredients.map(
+            (i) =>
+              ({
+                id: i.id,
+                name: i.product.name,
+                qty: i.quantity,
+                image: i.product.image,
+              }) as TableRowData,
+          ) || [],
+        )}
+      />
     </div>
   )
 }
