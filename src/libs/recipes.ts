@@ -27,12 +27,15 @@ export class Recipe implements RecipeType {
   ingredients: Ingredient[] = []
   otherIngredients: OtherIngredient[] = []
   subRecipes: any[] = []
-  clients: Client[] = []
+  clients: { id: string; client: Client }[] = []
   updatedAt: string = ''
   createdAt: string = ''
 
   constructor(data?: Partial<RecipeType>) {
     Object.assign(this, data)
-    this.clients = this.clients.map((client) => new Client(client))
+    this.clients = this.clients.map((client) => ({
+      id: client.id,
+      client: new Client(client.client),
+    }))
   }
 }
