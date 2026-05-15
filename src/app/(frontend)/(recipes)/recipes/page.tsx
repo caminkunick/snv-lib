@@ -44,6 +44,8 @@ const CardRoot = styled(Box)(({ theme }) => ({
   },
   '& .clients': {
     display: 'flex',
+    cursor: 'pointer',
+    pointerEvents: 'auto',
     '> *': {
       transition: 'margin-right 0.3s ease',
       marginRight: theme.spacing(-1.5),
@@ -91,6 +93,7 @@ const PageRecipes = () => {
           startIcon={<Add />}
           LinkComponent={'a'}
           href="/admin/collections/recipes/create"
+          target="_blank"
           size="small"
           children="Create New"
         />
