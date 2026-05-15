@@ -4,7 +4,7 @@ export const Recipes: CollectionConfig = {
   slug: 'recipes',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['image', 'title', 'type'],
+    defaultColumns: ['title', 'type'],
   },
   fields: [
     {
