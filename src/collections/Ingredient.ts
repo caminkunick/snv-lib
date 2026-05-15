@@ -4,7 +4,7 @@ export const Ingredients: CollectionConfig = {
   slug: 'ingredients',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['image', 'title', 'cost'],
+    defaultColumns: ['title', 'cost'],
   },
   access: {
     read: () => true,
@@ -28,11 +28,6 @@ export const Ingredients: CollectionConfig = {
       filterOptions: {
         mimeType: {
           contains: 'image',
-        },
-      },
-      admin: {
-        components: {
-          Cell: '@/components/UploadImageCell',
         },
       },
     },

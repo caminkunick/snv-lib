@@ -59,535 +59,538 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji'
+  | 'Pacific/Fiji';
 
 export interface Config {
   auth: {
-    users: UserAuthOperations
-  }
-  blocks: {}
+    users: UserAuthOperations;
+  };
+  blocks: {};
   collections: {
-    users: User
-    media: Media
-    recipes: Recipe
-    products: Product
-    ingredients: Ingredient
-    'payload-kv': PayloadKv
-    'payload-locked-documents': PayloadLockedDocument
-    'payload-preferences': PayloadPreference
-    'payload-migrations': PayloadMigration
-  }
-  collectionsJoins: {}
+    users: User;
+    media: Media;
+    recipes: Recipe;
+    products: Product;
+    ingredients: Ingredient;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>
-    media: MediaSelect<false> | MediaSelect<true>
-    recipes: RecipesSelect<false> | RecipesSelect<true>
-    products: ProductsSelect<false> | ProductsSelect<true>
-    ingredients: IngredientsSelect<false> | IngredientsSelect<true>
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
-  }
+    users: UsersSelect<false> | UsersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    recipes: RecipesSelect<false> | RecipesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    ingredients: IngredientsSelect<false> | IngredientsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
   db: {
-    defaultIDType: number
-  }
-  fallbackLocale: null
-  globals: {}
-  globalsSelect: {}
-  locale: null
+    defaultIDType: number;
+  };
+  fallbackLocale: null;
+  globals: {};
+  globalsSelect: {};
+  locale: null;
   widgets: {
-    collections: CollectionsWidget
-  }
-  user: User
+    collections: CollectionsWidget;
+  };
+  user: User;
   jobs: {
-    tasks: unknown
-    workflows: unknown
-  }
+    tasks: unknown;
+    workflows: unknown;
+  };
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   login: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   registerFirstUser: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   unlock: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number
-  updatedAt: string
-  createdAt: string
-  email: string
-  resetPasswordToken?: string | null
-  resetPasswordExpiration?: string | null
-  salt?: string | null
-  hash?: string | null
-  loginAttempts?: number | null
-  lockUntil?: string | null
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
   sessions?:
     | {
-        id: string
-        createdAt?: string | null
-        expiresAt: string
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
       }[]
-    | null
-  password?: string | null
-  collection: 'users'
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number
-  alt: string
-  updatedAt: string
-  createdAt: string
-  url?: string | null
-  thumbnailURL?: string | null
-  filename?: string | null
-  mimeType?: string | null
-  filesize?: number | null
-  width?: number | null
-  height?: number | null
-  focalX?: number | null
-  focalY?: number | null
-  firebaseURL?: string | null
-  smallURL?: string | null
-  smallBucketPath?: string | null
-  bucketPath?: string | null
-  blurhash?: string | null
+  id: number;
+  alt: string;
+  firebaseURL?: string | null;
+  smallURL?: string | null;
+  smallBucketPath?: string | null;
+  bucketPath?: string | null;
+  blurhash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "recipes".
  */
 export interface Recipe {
-  id: number
-  title?: string | null
-  title_th?: string | null
-  image?: (number | null) | Media
+  id: number;
+  title?: string | null;
+  title_th?: string | null;
+  image?: (number | null) | Media;
   method?: {
     root: {
-      type: string
+      type: string;
       children: {
-        type: any
-        version: number
-        [k: string]: unknown
-      }[]
-      direction: ('ltr' | 'rtl') | null
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-      indent: number
-      version: number
-    }
-    [k: string]: unknown
-  } | null
-  type?: ('master' | 'sub') | null
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  type?: ('master' | 'sub') | null;
   ingredients?:
     | {
-        product: number | Product
-        quantity: string
-        id?: string | null
+        product: number | Product;
+        quantity: string;
+        id?: string | null;
       }[]
-    | null
+    | null;
   otherIngredients?:
     | {
-        subIngredient: number | Ingredient
-        quantity: string
-        id?: string | null
+        subIngredient: number | Ingredient;
+        quantity: string;
+        id?: string | null;
       }[]
-    | null
+    | null;
   subRecipes?:
     | {
-        recipe: number | Recipe
-        quantity: string
-        id?: string | null
+        recipe: number | Recipe;
+        quantity: string;
+        id?: string | null;
       }[]
-    | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
 export interface Product {
-  id: number
-  title?: string | null
-  firebaseId: string
+  id: number;
+  title?: string | null;
+  firebaseId: string;
   sku?:
     | {
-        value?: string | null
-        id?: string | null
+        value?: string | null;
+        id?: string | null;
       }[]
-    | null
-  name?: string | null
-  name_th?: string | null
+    | null;
+  name?: string | null;
+  name_th?: string | null;
   unit?:
     | {
-        value?: string | null
-        id?: string | null
+        value?: string | null;
+        id?: string | null;
       }[]
-    | null
+    | null;
   price?:
     | {
-        value?: number | null
-        id?: string | null
+        value?: number | null;
+        id?: string | null;
       }[]
-    | null
-  cat?: string | null
-  tag?: string | null
-  image?: string | null
-  visibility?: ('public' | 'private' | 'trash') | null
-  size?: string | null
-  color_emarket?: string | null
-  desc_emarket?: string | null
-  slogan?: string | null
-  image_fruit?: string | null
-  emkt_offsetLeft?: string | null
-  offset_thumb_size?: string | null
-  color_bg?: string | null
-  color_primary?: string | null
-  color_secondary?: string | null
-  emkt_scale?: string | null
-  freezing_temp?: string | null
-  emkt_size?: string | null
-  refrigerate_time?: string | null
-  offset_thumb_top?: string | null
-  freezing_time?: string | null
-  instruction?: string | null
-  refrigerate_temp?: string | null
-  emkt_flavor?: string | null
-  emkt_fruit_scale?: string | null
-  image_emarket?: string | null
-  image_app?: string | null
-  emkt_weight?: string | null
-  catalog?: boolean | null
-  servingsPerUnit?: string | null
-  emkt_promo?: string | null
-  desc_th?: string | null
-  ex_weight?: string | null
-  ex_qty?: string | null
-  desc_en2?: string | null
-  emkt_title?: string | null
-  emkt_show_promo?: boolean | null
-  ex_weight_total?: string | null
-  enlarge?: boolean | null
-  desc_th2?: string | null
-  emkt_offsetTop?: string | null
-  desc?: string | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  cat?: string | null;
+  tag?: string | null;
+  image?: string | null;
+  visibility?: ('public' | 'private' | 'trash') | null;
+  size?: string | null;
+  color_emarket?: string | null;
+  desc_emarket?: string | null;
+  slogan?: string | null;
+  image_fruit?: string | null;
+  emkt_offsetLeft?: string | null;
+  offset_thumb_size?: string | null;
+  color_bg?: string | null;
+  color_primary?: string | null;
+  color_secondary?: string | null;
+  emkt_scale?: string | null;
+  freezing_temp?: string | null;
+  emkt_size?: string | null;
+  refrigerate_time?: string | null;
+  offset_thumb_top?: string | null;
+  freezing_time?: string | null;
+  instruction?: string | null;
+  refrigerate_temp?: string | null;
+  emkt_flavor?: string | null;
+  emkt_fruit_scale?: string | null;
+  image_emarket?: string | null;
+  image_app?: string | null;
+  emkt_weight?: string | null;
+  catalog?: boolean | null;
+  servingsPerUnit?: string | null;
+  emkt_promo?: string | null;
+  desc_th?: string | null;
+  ex_weight?: string | null;
+  ex_qty?: string | null;
+  desc_en2?: string | null;
+  emkt_title?: string | null;
+  emkt_show_promo?: boolean | null;
+  ex_weight_total?: string | null;
+  enlarge?: boolean | null;
+  desc_th2?: string | null;
+  emkt_offsetTop?: string | null;
+  desc?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ingredients".
  */
 export interface Ingredient {
-  id: number
-  title?: string | null
-  cost: number
-  image?: (number | null) | Media
-  updatedAt: string
-  createdAt: string
+  id: number;
+  title?: string | null;
+  cost: number;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number
-  key: string
+  id: number;
+  key: string;
   data:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number
+  id: number;
   document?:
     | ({
-        relationTo: 'users'
-        value: number | User
+        relationTo: 'users';
+        value: number | User;
       } | null)
     | ({
-        relationTo: 'media'
-        value: number | Media
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
-        relationTo: 'recipes'
-        value: number | Recipe
+        relationTo: 'recipes';
+        value: number | Recipe;
       } | null)
     | ({
-        relationTo: 'products'
-        value: number | Product
+        relationTo: 'products';
+        value: number | Product;
       } | null)
     | ({
-        relationTo: 'ingredients'
-        value: number | Ingredient
-      } | null)
-  globalSlug?: string | null
+        relationTo: 'ingredients';
+        value: number | Ingredient;
+      } | null);
+  globalSlug?: string | null;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  updatedAt: string
-  createdAt: string
+    relationTo: 'users';
+    value: number | User;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number
+  id: number;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  key?: string | null
+    relationTo: 'users';
+    value: number | User;
+  };
+  key?: string | null;
   value?:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number
-  name?: string | null
-  batch?: number | null
-  updatedAt: string
-  createdAt: string
+  id: number;
+  name?: string | null;
+  batch?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T
-  createdAt?: T
-  email?: T
-  resetPasswordToken?: T
-  resetPasswordExpiration?: T
-  salt?: T
-  hash?: T
-  loginAttempts?: T
-  lockUntil?: T
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
   sessions?:
     | T
     | {
-        id?: T
-        createdAt?: T
-        expiresAt?: T
-      }
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T
-  updatedAt?: T
-  createdAt?: T
-  url?: T
-  thumbnailURL?: T
-  filename?: T
-  mimeType?: T
-  filesize?: T
-  width?: T
-  height?: T
-  focalX?: T
-  focalY?: T
+  alt?: T;
+  firebaseURL?: T;
+  smallURL?: T;
+  smallBucketPath?: T;
+  bucketPath?: T;
+  blurhash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "recipes_select".
  */
 export interface RecipesSelect<T extends boolean = true> {
-  title?: T
-  title_th?: T
-  image?: T
-  method?: T
-  type?: T
+  title?: T;
+  title_th?: T;
+  image?: T;
+  method?: T;
+  type?: T;
   ingredients?:
     | T
     | {
-        product?: T
-        quantity?: T
-        id?: T
-      }
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
   otherIngredients?:
     | T
     | {
-        subIngredient?: T
-        quantity?: T
-        id?: T
-      }
+        subIngredient?: T;
+        quantity?: T;
+        id?: T;
+      };
   subRecipes?:
     | T
     | {
-        recipe?: T
-        quantity?: T
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
+        recipe?: T;
+        quantity?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  title?: T
-  firebaseId?: T
+  title?: T;
+  firebaseId?: T;
   sku?:
     | T
     | {
-        value?: T
-        id?: T
-      }
-  name?: T
-  name_th?: T
+        value?: T;
+        id?: T;
+      };
+  name?: T;
+  name_th?: T;
   unit?:
     | T
     | {
-        value?: T
-        id?: T
-      }
+        value?: T;
+        id?: T;
+      };
   price?:
     | T
     | {
-        value?: T
-        id?: T
-      }
-  cat?: T
-  tag?: T
-  image?: T
-  visibility?: T
-  size?: T
-  color_emarket?: T
-  desc_emarket?: T
-  slogan?: T
-  image_fruit?: T
-  emkt_offsetLeft?: T
-  offset_thumb_size?: T
-  color_bg?: T
-  color_primary?: T
-  color_secondary?: T
-  emkt_scale?: T
-  freezing_temp?: T
-  emkt_size?: T
-  refrigerate_time?: T
-  offset_thumb_top?: T
-  freezing_time?: T
-  instruction?: T
-  refrigerate_temp?: T
-  emkt_flavor?: T
-  emkt_fruit_scale?: T
-  image_emarket?: T
-  image_app?: T
-  emkt_weight?: T
-  catalog?: T
-  servingsPerUnit?: T
-  emkt_promo?: T
-  desc_th?: T
-  ex_weight?: T
-  ex_qty?: T
-  desc_en2?: T
-  emkt_title?: T
-  emkt_show_promo?: T
-  ex_weight_total?: T
-  enlarge?: T
-  desc_th2?: T
-  emkt_offsetTop?: T
-  desc?: T
-  updatedAt?: T
-  createdAt?: T
+        value?: T;
+        id?: T;
+      };
+  cat?: T;
+  tag?: T;
+  image?: T;
+  visibility?: T;
+  size?: T;
+  color_emarket?: T;
+  desc_emarket?: T;
+  slogan?: T;
+  image_fruit?: T;
+  emkt_offsetLeft?: T;
+  offset_thumb_size?: T;
+  color_bg?: T;
+  color_primary?: T;
+  color_secondary?: T;
+  emkt_scale?: T;
+  freezing_temp?: T;
+  emkt_size?: T;
+  refrigerate_time?: T;
+  offset_thumb_top?: T;
+  freezing_time?: T;
+  instruction?: T;
+  refrigerate_temp?: T;
+  emkt_flavor?: T;
+  emkt_fruit_scale?: T;
+  image_emarket?: T;
+  image_app?: T;
+  emkt_weight?: T;
+  catalog?: T;
+  servingsPerUnit?: T;
+  emkt_promo?: T;
+  desc_th?: T;
+  ex_weight?: T;
+  ex_qty?: T;
+  desc_en2?: T;
+  emkt_title?: T;
+  emkt_show_promo?: T;
+  ex_weight_total?: T;
+  enlarge?: T;
+  desc_th2?: T;
+  emkt_offsetTop?: T;
+  desc?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ingredients_select".
  */
 export interface IngredientsSelect<T extends boolean = true> {
-  title?: T
-  cost?: T
-  image?: T
-  updatedAt?: T
-  createdAt?: T
+  title?: T;
+  cost?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T
-  data?: T
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T
-  globalSlug?: T
-  user?: T
-  updatedAt?: T
-  createdAt?: T
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T
-  key?: T
-  value?: T
-  updatedAt?: T
-  createdAt?: T
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T
-  batch?: T
-  updatedAt?: T
-  createdAt?: T
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -595,17 +598,18 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown
-  }
-  width: 'full'
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown
+  [k: string]: unknown;
 }
+
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

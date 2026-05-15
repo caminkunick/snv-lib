@@ -173,6 +173,7 @@ export const Media: CollectionConfig = {
   fields: [
     {
       name: 'alt',
+      label: 'Alt Text (คำอธิบายภาพ สำหรับ SEO และผู้ใช้ที่ใช้ screen reader)',
       type: 'text',
       required: true,
     },
@@ -225,6 +226,7 @@ export const Media: CollectionConfig = {
       admin: {
         disableListColumn: true,
         hidden: true,
+        readOnly: true,
       },
     },
   ],

@@ -1,62 +1,6 @@
 import type { CollectionConfig, FieldHookArgs } from 'payload'
 import { firestore } from '@lib/firebase'
-
-const arrayFields = ['sku', 'unit', 'price']
-
-const transformFirebaseProduct = (product: Record<string, any>) => {
-  const transformed: Record<string, any> = { ...product }
-  for (const field of arrayFields) {
-    if (Array.isArray(transformed[field])) {
-      transformed[field] = transformed[field].map((item: any) =>
-        typeof item === 'object' && item !== null ? item : { value: item },
-      )
-    }
-  }
-  return transformed
-}
-
-const allowedKeys = [
-  'firebaseId',
-  'sku',
-  'name',
-  'name_th',
-  'unit',
-  'price',
-  'cat',
-  'tag',
-  'image',
-  'visibility',
-  'size',
-  'color_emarket',
-  'desc_emarket',
-  'slogan',
-  'image_fruit',
-  'emkt_offsetLeft',
-  'offset_thumb_size',
-  'color_bg',
-  'color_primary',
-  'color_secondary',
-  'emkt_scale',
-  'freezing_temp',
-  'emkt_size',
-  'refrigerate_time',
-  'offset_thumb_top',
-  'freezing_time',
-  'instruction',
-  'refrigerate_temp',
-  'emkt_flavor',
-  'emkt_fruit_scale',
-  'image_emarket',
-  'image_app',
-  'emkt_weight',
-  'catalog',
-  'servingsPerUnit',
-  'emkt_promo',
-  'desc_th',
-  'ex_weight',
-  'ex_qty',
-  'desc_en2',
-]
+import { Product } from '@/libs/products'
 
 const validateString = ({ value }: FieldHookArgs<any, any, any>) => {
   if (value !== null && value !== undefined) {
@@ -69,18 +13,22 @@ export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['image', 'name', 'name_th'],
+    defaultColumns: ['name', 'name_th'],
   },
   endpoints: [
     {
       path: '/cron',
       method: 'get',
       handler: async (req) => {
+        let debug: any = null
         try {
+          let stat = { total: 0, updated: 0, created: 0 }
           const firebaseProducts = await firestore
             .collection('products')
             .get()
-            .then((snapshot) => snapshot.docs.map((doc) => ({ firebaseId: doc.id, ...doc.data() })))
+            .then((snapshot) =>
+              snapshot.docs.map((doc) => new Product({ firebaseId: doc.id, ...doc.data() })),
+            )
 
           // get all products from req
           const products = await req.payload.find({
@@ -89,40 +37,39 @@ export const Products: CollectionConfig = {
             depth: 2,
           })
 
-          for (const firebaseProduct of firebaseProducts) {
-            const existingProduct = products.docs.find(
-              (product) => product.firebaseId === firebaseProduct.firebaseId,
+          const BATCH_SIZE = 50
+          for (let i = 0; i < firebaseProducts.length; i += BATCH_SIZE) {
+            const batch = firebaseProducts.slice(i, i + BATCH_SIZE)
+            await Promise.all(
+              batch.map((firebaseProduct) => {
+                const existingProduct = products.docs.find(
+                  (product) => product.firebaseId === firebaseProduct.firebaseId,
+                )
+                debug = { existingProduct, firebaseProduct }
+                const { id: _id, ...productData } = firebaseProduct as any
+                stat.total++
+                if (existingProduct) {
+                  // update existing product
+                  stat.updated++
+                  return req.payload.update({
+                    collection: 'products',
+                    id: existingProduct.id,
+                    data: productData,
+                  })
+                } else {
+                  stat.created++
+                  // create new product
+                  return req.payload.create({
+                    collection: 'products',
+                    data: productData,
+                  })
+                }
+              }),
             )
-            // allow only allowed keys to be updated
-            const filteredFirebaseProduct = transformFirebaseProduct(
-              Object.fromEntries(
-                Object.entries(firebaseProduct).filter(([key]) => allowedKeys.includes(key)),
-              ),
-            )
-            if (existingProduct) {
-              // update existing product
-              await req.payload.update({
-                collection: 'products',
-                id: existingProduct.id,
-                data: filteredFirebaseProduct,
-              })
-            } else {
-              // create new product
-              await req.payload.create({
-                collection: 'products',
-                data: filteredFirebaseProduct as any,
-              })
-            }
           }
 
-          const updatedProducts = await req.payload.find({
-            collection: 'products',
-            pagination: false,
-            depth: 2,
-          })
-
           return Response.json(
-            { message: 'This is a custom endpoint for products', products: updatedProducts },
+            { message: 'This is a custom endpoint for products', stat },
             {
               headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -130,9 +77,10 @@ export const Products: CollectionConfig = {
             },
           )
         } catch (error: any) {
-          console.error('Error in /api/products/cron:', error)
+          console.error('Error in /api/products/cron:', error?.message || error)
+          console.dir(debug, { depth: null })
           return Response.json(
-            { message: 'Error occurred while processing products', error: error.message },
+            { message: 'Error occurred while processing products', error: error?.message || error },
             {
               headers: {
                 'Content-Type': 'application/json; charset=utf-8',
