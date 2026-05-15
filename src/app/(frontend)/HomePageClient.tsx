@@ -133,7 +133,7 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
             {user ? 'เข้าสู่คลังสูตร' : 'เข้าสู่ระบบ'}
           </Button>
           <Button
-            href="https://synovafoods.com"
+            href="https://synova.biz"
             target="_blank"
             variant="outlined"
             size="large"

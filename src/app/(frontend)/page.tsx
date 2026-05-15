@@ -12,7 +12,8 @@ export default async function HomePage() {
 
   return (
     <HomePageClient
-      adminUrl={payloadConfig.routes.admin}
+      // adminUrl={payloadConfig.routes.admin}
+      adminUrl="/recipes"
       user={user ? { email: user.email ?? '' } : null}
     />
   )

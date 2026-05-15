@@ -72,6 +72,7 @@ export interface Config {
     recipes: Recipe;
     products: Product;
     ingredients: Ingredient;
+    clients: Client;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     recipes: RecipesSelect<false> | RecipesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     ingredients: IngredientsSelect<false> | IngredientsSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -218,6 +220,12 @@ export interface Recipe {
         id?: string | null;
       }[]
     | null;
+  clients?:
+    | {
+        client?: (number | null) | Client;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -307,6 +315,17 @@ export interface Ingredient {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  title: string;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -348,6 +367,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'ingredients';
         value: number | Ingredient;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -467,6 +490,12 @@ export interface RecipesSelect<T extends boolean = true> {
         quantity?: T;
         id?: T;
       };
+  clients?:
+    | T
+    | {
+        client?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -548,6 +577,16 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface IngredientsSelect<T extends boolean = true> {
   title?: T;
   cost?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  title?: T;
   image?: T;
   updatedAt?: T;
   createdAt?: T;

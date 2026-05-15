@@ -54,6 +54,9 @@ export const Recipes: CollectionConfig = {
     {
       label: 'Ingredients',
       type: 'collapsible',
+      admin: {
+        initCollapsed: false,
+      },
       fields: [
         {
           name: 'ingredients',
@@ -121,6 +124,27 @@ export const Recipes: CollectionConfig = {
               name: 'quantity',
               type: 'text',
               required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: 'Clients',
+      type: 'collapsible',
+      admin: {
+        initCollapsed: false,
+      },
+      fields: [
+        {
+          name: 'clients',
+          label: 'Client',
+          type: 'array',
+          fields: [
+            {
+              name: 'client',
+              type: 'relationship',
+              relationTo: 'clients',
             },
           ],
         },
