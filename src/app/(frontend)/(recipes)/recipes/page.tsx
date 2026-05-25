@@ -9,6 +9,7 @@ import {
   BoxProps,
   Button,
   Chip,
+  CircularProgress,
   Grid,
   IconButton,
   Pagination,
@@ -43,6 +44,9 @@ const ImageDisplay = styled(({ src, alt, ...props }: ImageDisplayProps) => {
   '& .main': {
     position: 'relative',
     zIndex: 1,
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
   },
   '& .bg': {
     position: 'absolute',
@@ -117,6 +121,31 @@ const CardRoot = styled(Box)(({ theme }) => ({
   },
 }))
 
+const Loading = () => {
+  return (
+    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <CardRoot>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: alpha('#000', 0.5),
+            zIndex: 2,
+          }}
+        >
+          <CircularProgress color="inherit" />
+        </Box>
+      </CardRoot>
+    </Grid>
+  )
+}
+
 class State {
   loading: boolean = false
   docs: Recipe[] = []
@@ -177,48 +206,52 @@ const PageRecipes = () => {
         />
       </Box>
       <Grid container spacing={1}>
-        {state.docs.map((doc) => (
-          <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <CardRoot>
-              <ImageDisplay src={doc.image?.url} alt={doc.title} />
-              <a className="overlay" href={`/recipes/${doc.id}`} target="_blank" />
-              <Box className="content">
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 'bold', lineHeight: 1.1 }}
-                  children={doc.title}
-                />
-                <Chip
-                  label={doc.type === 'master' ? 'สูตรหลัก' : 'สูตรย่อย'}
-                  size="small"
-                  variant={doc.type === 'master' ? 'filled' : 'outlined'}
-                  sx={{ textTransform: 'uppercase', fontSize: 9, mb: 1 }}
-                  color="primary"
-                />
-                <div className="actions">
-                  <IconButton
+        {state.loading ? (
+          <Loading />
+        ) : (
+          state.docs.map((doc) => (
+            <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
+              <CardRoot>
+                <ImageDisplay src={doc.image?.url} alt={doc.title} />
+                <a className="overlay" href={`/recipes/${doc.id}`} target="_blank" />
+                <Box className="content">
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 'bold', lineHeight: 1.1 }}
+                    children={doc.title}
+                  />
+                  <Chip
+                    label={doc.type === 'master' ? 'สูตรหลัก' : 'สูตรย่อย'}
                     size="small"
-                    color="warning"
-                    LinkComponent={'a'}
-                    href={`/admin/collections/recipes/${doc.id}`}
-                    target="_blank"
-                  >
-                    <Edit fontSize="small" />
-                  </IconButton>
-                </div>
-                <div className="clients">
-                  {doc.clients.map((client) => (
-                    <Avatar
-                      key={client.id}
-                      src={client.client?.image?.thumbnailURL}
-                      sx={{ width: 24, height: 24 }}
-                    />
-                  ))}
-                </div>
-              </Box>
-            </CardRoot>
-          </Grid>
-        ))}
+                    variant={doc.type === 'master' ? 'filled' : 'outlined'}
+                    sx={{ textTransform: 'uppercase', fontSize: 9, mb: 1 }}
+                    color="primary"
+                  />
+                  <div className="actions">
+                    <IconButton
+                      size="small"
+                      color="warning"
+                      LinkComponent={'a'}
+                      href={`/admin/collections/recipes/${doc.id}`}
+                      target="_blank"
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                  </div>
+                  <div className="clients">
+                    {doc.clients.map((client) => (
+                      <Avatar
+                        key={client.id}
+                        src={client.client?.image?.thumbnailURL}
+                        sx={{ width: 24, height: 24 }}
+                      />
+                    ))}
+                  </div>
+                </Box>
+              </CardRoot>
+            </Grid>
+          ))
+        )}
         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
           <Pagination
             count={state.totalPages}
