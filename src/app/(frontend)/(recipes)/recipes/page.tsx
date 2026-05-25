@@ -2,8 +2,17 @@
 
 import { Recipe } from '@/libs/recipes'
 import { Add, Edit } from '@mui/icons-material'
-import { Avatar, Box, Button, Grid, IconButton, styled, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Pagination,
+  styled,
+  Typography,
+} from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 
 const CardRoot = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -66,19 +75,46 @@ const CardRoot = styled(Box)(({ theme }) => ({
   },
 }))
 
-const PageRecipes = () => {
-  const [docs, setDocs] = useState<Recipe[]>([])
+class State {
+  loading: boolean = false
+  docs: Recipe[] = []
+  hasNextPage: boolean = false
+  hasPrevPage: boolean = false
+  limit: number = 10
+  nextPage: number | null = null
+  page: number = 1
+  pagingCounter: number = 1
+  prevPage: number | null = null
+  totalDocs: number = 0
+  totalPages: number = 0
 
-  useEffect(() => {
-    fetch('/api/recipes')
+  constructor(data?: Partial<State>) {
+    Object.assign(this, data)
+    this.docs = (data?.docs || []).map((doc) => new Recipe(doc))
+  }
+
+  Set<T extends keyof State>(key: T, value: State[T]): State {
+    return new State({ ...this, [key]: value })
+  }
+}
+
+const PageRecipes = () => {
+  const [page, setPage] = useState(1)
+  const [state, setState] = useState(new State())
+
+  const fetchRecipes = useCallback(() => {
+    setState((prev) => prev.Set('loading', true))
+    fetch(`/api/recipes?page=${page}`)
       .then((res) => res.json())
-      .then((data) => {
-        setDocs(data.docs.map((doc: any) => new Recipe(doc)))
-      })
+      .then((data) => setState((prev) => new State({ ...prev, ...data, loading: false })))
       .catch((err) => {
         console.error('Error fetching recipes:', err)
       })
-  }, [])
+  }, [page])
+
+  useEffect(() => {
+    fetchRecipes()
+  }, [fetchRecipes])
 
   return (
     <div>
@@ -99,7 +135,7 @@ const PageRecipes = () => {
         />
       </Box>
       <Grid container spacing={1}>
-        {docs.map((doc) => (
+        {state.docs.map((doc) => (
           <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <CardRoot>
               {doc.image?.url && (
@@ -142,6 +178,13 @@ const PageRecipes = () => {
             </CardRoot>
           </Grid>
         ))}
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
+          <Pagination
+            count={state.totalPages}
+            page={page}
+            onChange={(_event, value) => setPage(value)}
+          />
+        </Box>
       </Grid>
     </div>
   )
