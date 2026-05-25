@@ -1,9 +1,15 @@
+import { ImageType } from './image'
 import { Product } from './products'
 
-export interface Ingredient {
-  id: string
-  product: Product
-  quantity: string
+export class Ingredient {
+  id: string = ''
+  product: Product | null = null
+  quantity: string = '0'
+
+  constructor(data?: Partial<Ingredient>) {
+    Object.assign(this, data)
+    this.product = this.product ? new Product(this.product) : null
+  }
 }
 
 export interface OtherIngredient {
@@ -16,7 +22,7 @@ export interface SubIngredient {
   id: number
   title: string
   cost: number
-  image: any
+  image: ImageType | null
   updatedAt: string
   createdAt: string
 }

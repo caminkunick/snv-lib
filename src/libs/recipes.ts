@@ -26,7 +26,7 @@ export class Recipe implements RecipeType {
   type: string = ''
   ingredients: Ingredient[] = []
   otherIngredients: OtherIngredient[] = []
-  subRecipes: any[] = []
+  subRecipes: { id: string; recipe: Recipe; quantity: string }[] = []
   clients: { id: string; client: Client }[] = []
   updatedAt: string = ''
   createdAt: string = ''
@@ -36,6 +36,12 @@ export class Recipe implements RecipeType {
     this.clients = this.clients.map((client) => ({
       id: client.id,
       client: new Client(client.client),
+    }))
+    this.ingredients = this.ingredients.map((ingredient) => new Ingredient(ingredient))
+    this.subRecipes = this.subRecipes.map((subRecipe) => ({
+      id: subRecipe.id,
+      recipe: new Recipe(subRecipe.recipe),
+      quantity: subRecipe.quantity || '0',
     }))
   }
 }

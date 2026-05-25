@@ -66,6 +66,21 @@ export class Product {
     })
   }
 
+  Get() {
+    return {
+      cost: (): number => {
+        const price = Number(this.price[0]?.value || 0)
+        if (this.cat === 'syrups') {
+          return price / 830
+        }
+        return 0
+      },
+      totalCost: (qty: number): number => {
+        return this.Get().cost() * qty
+      },
+    }
+  }
+
   static allowedKeys = [
     'firebaseId',
     'sku',

@@ -7,6 +7,7 @@ import { Recipe } from '@/libs/recipes'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import { Table, TableRowData } from './table'
+import { Product } from '@/libs/products'
 
 const PageRecipe = async ({ params }: { params: { id: string } }) => {
   const { id } = await params
@@ -43,9 +44,33 @@ const PageRecipe = async ({ params }: { params: { id: string } }) => {
             (i) =>
               ({
                 id: i.id,
-                name: i.product.name,
+                name: i.product?.name,
                 qty: i.quantity,
-                image: i.product.image,
+                image: i.product?.image,
+                cost: i.product?.Get().cost(),
+                totalCost: i.product?.Get().totalCost(Number(i.quantity || 0)),
+              }) as TableRowData,
+          ) || [],
+          recipe?.otherIngredients.map(
+            (i) =>
+              ({
+                id: i.id,
+                name: i.subIngredient.title,
+                qty: i.quantity,
+                image: i.subIngredient.image?.thumbnailURL,
+                cost: i.subIngredient.cost,
+                totalCost: i.subIngredient.cost * Number(i.quantity || 0),
+              }) as TableRowData,
+          ) || [],
+          recipe?.subRecipes.map(
+            (i) =>
+              ({
+                id: i.id,
+                name: i.recipe.title,
+                qty: i.quantity,
+                image: i.recipe.image?.thumbnailURL,
+                // cost: i.subRecipe.cost,
+                // totalCost: i.subRecipe.cost * Number(i.quantity || 0),
               }) as TableRowData,
           ) || [],
         )}
