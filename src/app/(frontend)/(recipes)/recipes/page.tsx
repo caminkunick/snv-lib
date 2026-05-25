@@ -3,9 +3,12 @@
 import { Recipe } from '@/libs/recipes'
 import { Add, Edit } from '@mui/icons-material'
 import {
+  alpha,
   Avatar,
   Box,
+  BoxProps,
   Button,
+  Chip,
   Grid,
   IconButton,
   Pagination,
@@ -13,6 +16,45 @@ import {
   Typography,
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
+
+type ImageDisplayProps = BoxProps & { src?: string; alt?: string }
+const ImageDisplay = styled(({ src, alt, ...props }: ImageDisplayProps) => {
+  return (
+    <Box {...props}>
+      {src && alt && (
+        <>
+          <img className="main" src={src} alt={alt} />
+          <img className="bg" src={src} alt={alt} />
+        </>
+      )}
+    </Box>
+  )
+})<ImageDisplayProps>(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  transition: 'transform 0.3s ease',
+  zIndex: 0,
+  overflow: 'hidden',
+  background: `linear-gradient(to bottom, ${alpha(theme.palette.primary.main, 0.7)}, rgba(0, 0, 0, 0))`,
+  '& .main': {
+    position: 'relative',
+    zIndex: 1,
+  },
+  '& .bg': {
+    position: 'absolute',
+    width: '120%',
+    height: '120%',
+    top: '-10%',
+    left: '-10%',
+    objectFit: 'cover',
+    filter: 'blur(8px) brightness(0.7)',
+    zIndex: 0,
+  },
+}))
 
 const CardRoot = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -138,21 +180,20 @@ const PageRecipes = () => {
         {state.docs.map((doc) => (
           <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4 }}>
             <CardRoot>
-              {doc.image?.url && (
-                <Box
-                  className="image"
-                  component="img"
-                  src={doc.image.url}
-                  alt={doc.title}
-                  sx={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                />
-              )}
+              <ImageDisplay src={doc.image?.url} alt={doc.title} />
               <a className="overlay" href={`/recipes/${doc.id}`} target="_blank" />
               <Box className="content">
                 <Typography
                   variant="h6"
-                  sx={{ fontWeight: 'bold', lineHeight: 1.1, mb: 1 }}
+                  sx={{ fontWeight: 'bold', lineHeight: 1.1 }}
                   children={doc.title}
+                />
+                <Chip
+                  label={doc.type === 'master' ? 'สูตรหลัก' : 'สูตรย่อย'}
+                  size="small"
+                  variant={doc.type === 'master' ? 'filled' : 'outlined'}
+                  sx={{ textTransform: 'uppercase', fontSize: 9, mb: 1 }}
+                  color="primary"
                 />
                 <div className="actions">
                   <IconButton
