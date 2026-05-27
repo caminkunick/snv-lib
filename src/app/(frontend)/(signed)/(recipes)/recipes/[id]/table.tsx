@@ -9,14 +9,15 @@ export type TableRowData = {
   name: string
   qty: number | string
   image?: string
-  cost?: number
-  totalCost?: number
+  cost?: number | string
+  totalCost?: number | string
   size: number | string
-  price?: number
+  price?: number | string
+  link?: string
 }
 export const Table = ({ rows }: { rows: TableRowData[] }) => (
   <Box
-    sx={{ height: 400 }}
+    sx={{ height: 480 }}
     children={
       <DataGrid
         rows={rows}
@@ -45,7 +46,18 @@ export const Table = ({ rows }: { rows: TableRowData[] }) => (
                 </Box>
               ) : null,
           },
-          { field: 'name', headerName: 'Ingredient', flex: 1, minWidth: 200 },
+          {
+            field: 'name',
+            headerName: 'Ingredient',
+            flex: 1,
+            minWidth: 200,
+            renderCell: ({ row, value }) =>
+              row.link ? (
+                <a href={row.link} children={value} />
+              ) : (
+                <Box sx={{ textTransform: 'capitalize' }} children={value} />
+              ),
+          },
           { field: 'qty', headerName: 'Qty (g/ml)', width: 100, align: 'right' },
           {
             field: 'cost',

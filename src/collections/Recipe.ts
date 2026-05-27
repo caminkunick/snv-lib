@@ -77,6 +77,15 @@ export const Recipes: CollectionConfig = {
                   type: 'text',
                   required: true,
                 },
+                {
+                  name: 'unit',
+                  type: 'select',
+                  options: [
+                    { label: 'g', value: 'g' },
+                    { label: 'ml', value: 'ml' },
+                  ],
+                  defaultValue: 'g',
+                },
               ],
             },
           ],
@@ -100,6 +109,15 @@ export const Recipes: CollectionConfig = {
                   type: 'text',
                   required: true,
                 },
+                {
+                  name: 'unit',
+                  type: 'select',
+                  options: [
+                    { label: 'g', value: 'g' },
+                    { label: 'ml', value: 'ml' },
+                  ],
+                  defaultValue: 'g',
+                },
               ],
             },
           ],
@@ -110,41 +128,69 @@ export const Recipes: CollectionConfig = {
           type: 'array',
           fields: [
             {
-              name: 'recipe',
-              type: 'relationship',
-              relationTo: 'recipes',
-              required: true,
-              filterOptions: {
-                type: {
-                  equals: 'sub',
+              type: 'row',
+              fields: [
+                {
+                  name: 'recipe',
+                  type: 'relationship',
+                  relationTo: 'recipes',
+                  required: true,
+                  filterOptions: {
+                    type: {
+                      equals: 'sub',
+                    },
+                  },
                 },
-              },
-            },
-            {
-              name: 'quantity',
-              type: 'text',
-              required: true,
+                {
+                  name: 'quantity',
+                  type: 'text',
+                  required: true,
+                },
+                {
+                  name: 'unit',
+                  type: 'select',
+                  options: [
+                    { label: 'g', value: 'g' },
+                    { label: 'ml', value: 'ml' },
+                  ],
+                  defaultValue: 'g',
+                },
+              ],
             },
           ],
         },
       ],
     },
     {
-      label: 'Clients',
+      label: 'Others',
       type: 'collapsible',
-      admin: {
-        initCollapsed: false,
-      },
       fields: [
         {
+          name: 'expiration',
+          label: 'Expiration',
+          type: 'text',
+        },
+        {
           name: 'clients',
-          label: 'Client',
+          label: 'Clients',
           type: 'array',
           fields: [
             {
               name: 'client',
               type: 'relationship',
               relationTo: 'clients',
+            },
+          ],
+        },
+        {
+          name: 'categories',
+          label: 'Category',
+          type: 'array',
+          fields: [
+            {
+              name: 'category',
+              type: 'relationship',
+              relationTo: 'categories',
             },
           ],
         },

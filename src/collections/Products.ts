@@ -46,7 +46,9 @@ export const Products: CollectionConfig = {
                   (product) => product.firebaseId === firebaseProduct.firebaseId,
                 )
                 debug = { existingProduct, firebaseProduct }
-                const { id: _id, ...productData } = firebaseProduct as any
+                let { id: _id, ...productData } = firebaseProduct as any
+                productData.title = `${productData.name} ${productData.tag}`.trim()
+                productData.name = `${productData.name} ${productData.tag}`.trim()
                 stat.total++
                 if (existingProduct) {
                   // update existing product

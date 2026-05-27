@@ -5,6 +5,7 @@ export class Ingredient {
   id: string = ''
   product: Product | null = null
   quantity: string = '0'
+  unit: string = 'g'
 
   constructor(data?: Partial<Ingredient>) {
     Object.assign(this, data)
@@ -16,6 +17,7 @@ export interface OtherIngredient {
   id: string
   subIngredient: SubIngredient
   quantity: string
+  unit: string
 }
 
 export interface SubIngredient {
@@ -25,4 +27,5 @@ export interface SubIngredient {
   image: ImageType | null
   updatedAt: string
   createdAt: string
+  unit: string
 }

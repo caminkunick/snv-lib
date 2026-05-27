@@ -7,7 +7,12 @@ import {
   Avatar,
   Box,
   Container,
+  Drawer,
   IconButton,
+  List,
+  ListItemButton,
+  ListItemText,
+  ListSubheader,
   Menu,
   MenuItem,
   ThemeProvider,
@@ -18,9 +23,22 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { LocalBar } from '@mui/icons-material'
+import { LocalBar, Menu as MenuIcon } from '@mui/icons-material'
+
+class State {
+  drawerOpen: boolean = false
+
+  constructor(data?: Partial<State>) {
+    Object.assign(this, data)
+  }
+
+  Set<K extends keyof State>(key: K, value: State[K]): State {
+    return new State({ ...this, [key]: value })
+  }
+}
 
 export const PreCon = ({ children, user }: { children: React.ReactNode; user: User | null }) => {
+  const [state, setState] = useState(new State())
   const [anchor, setAnchor] = useState<null | HTMLElement>(null)
   const router = useRouter()
 
@@ -47,6 +65,11 @@ export const PreCon = ({ children, user }: { children: React.ReactNode; user: Us
     <ThemeProvider theme={Core.theme}>
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
+          <IconButton
+            edge="start"
+            children={<MenuIcon />}
+            onClick={() => setState((s) => s.Set('drawerOpen', true))}
+          />
           <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <Typography
               color="primary"
@@ -60,10 +83,10 @@ export const PreCon = ({ children, user }: { children: React.ReactNode; user: Us
               }}
             >
               <LocalBar />
-              Synova
-              <Typography variant="inherit" color="textPrimary">
-                Library
-              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 0.8 }}>
+                <Typography variant="inherit">Synova</Typography>
+                <Typography variant="caption" color="textSecondary" children="Library" />
+              </Box>
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1 }} />
@@ -72,12 +95,32 @@ export const PreCon = ({ children, user }: { children: React.ReactNode; user: Us
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
         {children}
       </Container>
       <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
+      <Drawer
+        open={state.drawerOpen}
+        onClose={() => setState(state.Set('drawerOpen', false))}
+        slotProps={{
+          paper: {
+            sx: {
+              minWidth: 240,
+            },
+          },
+        }}
+      >
+        <List disablePadding subheader={<ListSubheader>Menu</ListSubheader>}>
+          <ListItemButton component={Link} href="/recipes">
+            <ListItemText primary="Recipes" />
+          </ListItemButton>
+          <ListItemButton component={Link} href="/categories">
+            <ListItemText primary="Categories" />
+          </ListItemButton>
+        </List>
+      </Drawer>
     </ThemeProvider>
   )
 }

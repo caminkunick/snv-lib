@@ -11,6 +11,9 @@ export namespace Core {
         main: '#e3a622',
       },
     },
+    typography: {
+      fontFamily: '"Kanit", sans-serif',
+    },
   })
 
   export const connect =

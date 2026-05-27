@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import config from '@/payload.config'
 import { PreCon } from './pre.con'
 
+import '../styles.css'
+
 const LayoutRecipes = async ({ children }: { children: React.ReactNode }) => {
   const headers = await getHeaders()
   const payloadConfig = await config
@@ -12,7 +14,7 @@ const LayoutRecipes = async ({ children }: { children: React.ReactNode }) => {
   const { user } = await payload.auth({ headers })
 
   if (!user) {
-    redirect(`${payloadConfig.serverURL}/admin/login?redirect=${encodeURIComponent('/recipes')}`)
+    redirect(`${payloadConfig.serverURL}/admin/login?redirect=${encodeURIComponent('/')}`)
   }
 
   return <PreCon children={children} user={user} />

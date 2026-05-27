@@ -73,6 +73,7 @@ export interface Config {
     products: Product;
     ingredients: Ingredient;
     clients: Client;
+    categories: Category;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     ingredients: IngredientsSelect<false> | IngredientsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -203,6 +205,7 @@ export interface Recipe {
     | {
         product: number | Product;
         quantity: string;
+        unit?: ('g' | 'ml') | null;
         id?: string | null;
       }[]
     | null;
@@ -210,6 +213,7 @@ export interface Recipe {
     | {
         subIngredient: number | Ingredient;
         quantity: string;
+        unit?: ('g' | 'ml') | null;
         id?: string | null;
       }[]
     | null;
@@ -217,12 +221,20 @@ export interface Recipe {
     | {
         recipe: number | Recipe;
         quantity: string;
+        unit?: ('g' | 'ml') | null;
         id?: string | null;
       }[]
     | null;
+  expiration?: string | null;
   clients?:
     | {
         client?: (number | null) | Client;
+        id?: string | null;
+      }[]
+    | null;
+  categories?:
+    | {
+        category?: (number | null) | Category;
         id?: string | null;
       }[]
     | null;
@@ -326,6 +338,33 @@ export interface Client {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image?: (number | null) | Media;
+  parent?: (number | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -371,6 +410,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'clients';
         value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -474,6 +517,7 @@ export interface RecipesSelect<T extends boolean = true> {
     | {
         product?: T;
         quantity?: T;
+        unit?: T;
         id?: T;
       };
   otherIngredients?:
@@ -481,6 +525,7 @@ export interface RecipesSelect<T extends boolean = true> {
     | {
         subIngredient?: T;
         quantity?: T;
+        unit?: T;
         id?: T;
       };
   subRecipes?:
@@ -488,12 +533,20 @@ export interface RecipesSelect<T extends boolean = true> {
     | {
         recipe?: T;
         quantity?: T;
+        unit?: T;
         id?: T;
       };
+  expiration?: T;
   clients?:
     | T
     | {
         client?: T;
+        id?: T;
+      };
+  categories?:
+    | T
+    | {
+        category?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -588,6 +641,18 @@ export interface IngredientsSelect<T extends boolean = true> {
 export interface ClientsSelect<T extends boolean = true> {
   title?: T;
   image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  image?: T;
+  parent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

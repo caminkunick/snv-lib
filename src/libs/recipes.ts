@@ -17,6 +17,20 @@ export interface RecipeType {
   createdAt: string
 }
 
+export class Category {
+  id: number = 0
+  name: string = ''
+  parent: Category | null = null
+  description: string | null = null
+  image: ImageType | null = null
+  createdAt: string = ''
+  updatedAt: string = ''
+
+  constructor(data?: Partial<Category>) {
+    Object.assign(this, data)
+  }
+}
+
 export class Recipe implements RecipeType {
   id: number = 0
   title: string = ''
@@ -26,8 +40,9 @@ export class Recipe implements RecipeType {
   type: string = ''
   ingredients: Ingredient[] = []
   otherIngredients: OtherIngredient[] = []
-  subRecipes: { id: string; recipe: Recipe; quantity: string }[] = []
+  subRecipes: { id: string; recipe: Recipe; quantity: string; unit: string }[] = []
   clients: { id: string; client: Client }[] = []
+  categories: { id: string; category: Category }[] = []
   updatedAt: string = ''
   createdAt: string = ''
 
@@ -42,6 +57,7 @@ export class Recipe implements RecipeType {
       id: subRecipe.id,
       recipe: new Recipe(subRecipe.recipe),
       quantity: subRecipe.quantity || '0',
+      unit: subRecipe.unit || 'g',
     }))
   }
 }
