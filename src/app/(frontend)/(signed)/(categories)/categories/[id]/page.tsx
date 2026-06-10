@@ -24,16 +24,6 @@ const PageCategory = async ({ params }: { params: { id: string } }) => {
     return <NotFound category="Category" back="/categories" />
   }
 
-  const parentId = (category.parent as Category)?.id || null
-  const parent = parentId
-    ? await payload
-        .findByID({
-          collection: 'categories',
-          id: parentId,
-        })
-        .catch(() => null)
-    : null
-
   const childrens = await payload
     .find({
       collection: 'categories',
@@ -74,13 +64,7 @@ const PageCategory = async ({ params }: { params: { id: string } }) => {
           },
         ]}
       />
-      {parent && (
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="h6" gutterBottom children="Parent" />
-          <GridCat docs={[parent]} />
-        </Box>
-      )}
-      {childrens.docs.length > 0 && (
+      {childrens?.docs.length > 0 && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="h6" gutterBottom children="Sub Categories" />
           <GridCat docs={childrens.docs} />
@@ -88,7 +72,7 @@ const PageCategory = async ({ params }: { params: { id: string } }) => {
       )}
       <Box>
         <Typography variant="h6" gutterBottom sx={{ mt: 4 }} children="Recipes" />
-        {recipes.docs.length > 0 ? (
+        {recipes?.docs.length > 0 ? (
           <GridList docs={recipes.docs} />
         ) : (
           <Typography variant="body1" children="No recipes found." color="textSecondary" />

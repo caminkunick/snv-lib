@@ -8,18 +8,9 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import { Table, TableRowData } from './table'
 import { Product } from '@/libs/products'
-import {
-  Avatar,
-  Box,
-  Breadcrumbs,
-  Button,
-  Chip,
-  Fab,
-  Grid,
-  Snackbar,
-  Typography,
-} from '@mui/material'
+import { Avatar, Box, Breadcrumbs, Button, Chip, Fab, Grid, Typography } from '@mui/material'
 import { Edit as EditIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material'
+import { SnackFab } from '@/components/snack.fab'
 
 const PageRecipe = async ({
   params,
@@ -161,7 +152,7 @@ const PageRecipe = async ({
           </Box>
         </Box>
       )}
-      <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <SnackFab>
         <Fab
           children={<EditIcon />}
           color="primary"
@@ -169,7 +160,7 @@ const PageRecipe = async ({
           href={`/admin/collections/recipes/${id}`}
           target="_blank"
         />
-      </Snackbar>
+      </SnackFab>
     </div>
   )
 }

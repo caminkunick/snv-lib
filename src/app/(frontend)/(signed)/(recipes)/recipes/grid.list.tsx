@@ -121,7 +121,7 @@ export const GridList = (props: GridListProps) => {
         <Loading />
       ) : (
         props.docs.map((doc) => (
-          <Grid key={doc.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grid key={doc.id} size={{ xs: 12, sm: 4, md: 3, lg: 2 }}>
             <Card>
               <CardMedia
                 component={doc.image?.firebaseURL ? 'img' : 'div'}

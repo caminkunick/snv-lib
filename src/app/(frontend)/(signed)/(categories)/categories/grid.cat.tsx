@@ -1,6 +1,19 @@
+'use client'
+
 import { Category } from '@/payload-types'
 import { Edit, ImageNotSupported } from '@mui/icons-material'
-import { Avatar, Card, CardHeader, Grid, IconButton } from '@mui/material'
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  Grid,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemButtonProps,
+  ListItemText,
+} from '@mui/material'
+import { styled } from '@mui/material'
 
 export const GridCat = ({ docs }: { docs: Category[] }) => {
   return docs.length > 0 ? (
@@ -38,3 +51,33 @@ export const GridCat = ({ docs }: { docs: Category[] }) => {
     </Grid>
   ) : null
 }
+
+export type EnhanceListItemButtonProps = ListItemButtonProps & {
+  doc: Category
+  docs: Category[]
+  tab?: number
+}
+export const EnhanceListItemButton = styled(
+  ({ doc, docs, tab = 0, ...props }: EnhanceListItemButtonProps) => {
+    const children = docs.filter((d) => d.parent === doc.id)
+    return (
+      <>
+        <ListItemButton component="a" href={`/categories/${doc.id}`} target="_blank" {...props}>
+          <ListItemText primary={doc.name} />
+        </ListItemButton>
+        {children.length > 0 ? (
+          <List disablePadding>
+            {children.map((child) => (
+              <EnhanceListItemButton doc={child} docs={docs} key={child.id} tab={tab + 1} />
+            ))}
+          </List>
+        ) : null}
+      </>
+    )
+  },
+)<EnhanceListItemButtonProps>(({ theme, tab = 0 }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.spacing(2),
+  marginBottom: theme.spacing(1),
+  marginLeft: theme.spacing(tab * 4),
+}))

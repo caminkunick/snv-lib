@@ -2,26 +2,17 @@
 
 import { Recipe } from '@/libs/recipes'
 import { Add, List as ListIcon, Window as WindowIcon } from '@mui/icons-material'
-import {
-  Box,
-  Button,
-  Fab,
-  MenuItem,
-  Pagination,
-  Select,
-  Snackbar,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Fab, MenuItem, Pagination, Select, Tooltip, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { GridList } from './grid.list'
+import { SnackFab } from '@/components/snack.fab'
 
 class State {
   loading: boolean = false
   docs: Recipe[] = []
   hasNextPage: boolean = false
   hasPrevPage: boolean = false
-  limit: number = 10
+  limit: number = 20
   nextPage: number | null = null
   page: number = 1
   pagingCounter: number = 1
@@ -76,7 +67,7 @@ const PageRecipes = () => {
           onChange={(e) => setState((s) => s.Set('limit', e.target.value))}
           sx={{ ml: 2 }}
         >
-          {[10, 20, 50, 100].map((option) => (
+          {[20, 50, 100, 200].map((option) => (
             <MenuItem key={option} value={option}>
               {option}
             </MenuItem>
@@ -91,7 +82,7 @@ const PageRecipes = () => {
           onChange={(_event, value) => setPage(value)}
         />
       </Box>
-      <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <SnackFab>
         <Tooltip title="Create New Recipe" placement="left">
           <Fab
             children={<Add />}
@@ -100,7 +91,7 @@ const PageRecipes = () => {
             href="/admin/collections/recipes/create"
           />
         </Tooltip>
-      </Snackbar>
+      </SnackFab>
     </div>
   )
 }

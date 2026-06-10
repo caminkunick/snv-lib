@@ -11,14 +11,37 @@ import {
   Stack,
   Toolbar,
   Typography,
+  styled,
 } from '@mui/material'
 import { LocalBar, MenuBook, Lock, Science, AutoAwesome } from '@mui/icons-material'
 import { Core } from '@/components/core'
+import Image from 'next/image'
+import bg from './bg.png'
 
 type Props = {
   user: { email: string } | null
   adminUrl: string
 }
+
+const Hero = styled(Box)(({}) => ({
+  width: '100%',
+  aspectRatio: '16 / 9',
+  position: 'relative',
+  img: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 1,
+    filter: 'brightness(0.4)',
+  },
+  '.hero-content': {
+    position: 'relative',
+    zIndex: 2,
+  },
+}))
 
 const features = [
   {
@@ -88,69 +111,78 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
       </AppBar>
 
       {/* Hero */}
-      <Box
-        sx={{
-          py: { xs: 10, md: 16 },
-          textAlign: 'center',
-          background:
-            'linear-gradient(180deg, rgba(var(--mui-palette-primary-mainChannel) / 0.08) 0%, transparent 100%)',
-          px: 2,
-        }}
-      >
-        <LocalBar sx={{ fontSize: 64, color: 'primary.main', mb: 3 }} />
-        <Typography
-          variant="h1"
-          sx={{ fontWeight: 900, fontSize: { xs: '2.5rem', md: '4rem' }, lineHeight: 1.15, mb: 2 }}
-        >
-          Synova{' '}
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            Library
-          </Box>
-        </Typography>
-        <Typography
-          variant="h5"
+      <Hero>
+        <Image src={bg} alt="Background" />
+        <Box
+          className="hero-content"
           sx={{
-            color: 'rgba(255,255,255,0.55)',
-            maxWidth: 560,
-            mx: 'auto',
-            mb: 4,
-            fontWeight: 400,
-            fontSize: { xs: '1rem', md: '1.25rem' },
+            py: { xs: 10, md: 16 },
+            textAlign: 'center',
+            background:
+              'linear-gradient(180deg, rgba(var(--mui-palette-primary-mainChannel) / 0.08) 0%, transparent 100%)',
+            px: 2,
           }}
         >
-          คลังสูตร Beverage สำหรับทีม Synova — รวบรวมสูตรทุกรายการไว้ในที่เดียว
-          เข้าถึงได้เฉพาะผู้ใช้งานที่ได้รับสิทธิ์
-        </Typography>
-        <Stack direction="row" spacing={2} sx={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Button
-            href={adminUrl}
-            target="_blank"
-            variant="contained"
-            color="primary"
-            size="large"
-            sx={{ fontWeight: 700, px: 4, borderRadius: 2, textTransform: 'none' }}
-          >
-            {user ? 'เข้าสู่คลังสูตร' : 'เข้าสู่ระบบ'}
-          </Button>
-          <Button
-            href="https://synova.biz"
-            target="_blank"
-            variant="outlined"
-            size="large"
+          <LocalBar sx={{ fontSize: 64, color: 'primary.main', mb: 3 }} />
+          <Typography
+            variant="h1"
             sx={{
-              borderColor: 'rgba(255,255,255,0.2)',
-              color: '#fff',
-              '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.05)' },
-              fontWeight: 600,
-              px: 4,
-              borderRadius: 2,
-              textTransform: 'none',
+              fontWeight: 900,
+              fontSize: { xs: '2.5rem', md: '4rem' },
+              lineHeight: 1.15,
+              textTransform: 'uppercase',
+              mb: 2,
             }}
           >
-            เว็บไซต์ Synova
-          </Button>
-        </Stack>
-      </Box>
+            Synova{' '}
+            <Box component="span" sx={{ color: 'primary.main' }}>
+              Library
+            </Box>
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              maxWidth: 560,
+              mx: 'auto',
+              mb: 4,
+              fontWeight: 400,
+              fontSize: { xs: '1rem', md: '1.25rem' },
+            }}
+          >
+            คลังสูตร Beverage สำหรับทีม Synova — รวบรวมสูตรทุกรายการไว้ในที่เดียว
+            เข้าถึงได้เฉพาะผู้ใช้งานที่ได้รับสิทธิ์
+          </Typography>
+          <Stack direction="row" spacing={2} sx={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button
+              href={adminUrl}
+              target="_blank"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ fontWeight: 700, px: 4, borderRadius: 2, textTransform: 'none' }}
+            >
+              {user ? 'เข้าสู่คลังสูตร' : 'เข้าสู่ระบบ'}
+            </Button>
+            <Button
+              href="https://synova.biz"
+              target="_blank"
+              variant="outlined"
+              size="large"
+              sx={{
+                borderColor: 'rgba(255,255,255,0.2)',
+                color: '#fff',
+                '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.05)' },
+                fontWeight: 600,
+                px: 4,
+                borderRadius: 2,
+                textTransform: 'none',
+              }}
+            >
+              เว็บไซต์ Synova
+            </Button>
+          </Stack>
+        </Box>
+      </Hero>
 
       <Divider sx={{ borderColor: 'rgba(255,255,255,0.07)', mx: { xs: 2, md: 8 } }} />
 

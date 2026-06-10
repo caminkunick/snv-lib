@@ -74,6 +74,7 @@ export interface Config {
     ingredients: Ingredient;
     clients: Client;
     categories: Category;
+    'product-cats': ProductCat;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     ingredients: IngredientsSelect<false> | IngredientsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'product-cats': ProductCatsSelect<false> | ProductCatsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -365,6 +367,34 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-cats".
+ */
+export interface ProductCat {
+  id: number;
+  label: string;
+  label_th: string;
+  slug?: string | null;
+  desc?: string | null;
+  desc_th?: string | null;
+  bakery?: boolean | null;
+  beverage?: boolean | null;
+  style?: ('card' | 'list' | 'table') | null;
+  image_cover?: (number | null) | Media;
+  image_cover_th?: (number | null) | Media;
+  image_icon?: (number | null) | Media;
+  image_catalogcover?: (number | null) | Media;
+  image_store_en?: (number | null) | Media;
+  image_store_th?: (number | null) | Media;
+  image_recipe?: (number | null) | Media;
+  image_gtk?: (number | null) | Media;
+  image_gtk_th?: (number | null) | Media;
+  lastpagegfx?: boolean | null;
+  showonback?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -414,6 +444,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'product-cats';
+        value: number | ProductCat;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -653,6 +687,33 @@ export interface CategoriesSelect<T extends boolean = true> {
   description?: T;
   image?: T;
   parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-cats_select".
+ */
+export interface ProductCatsSelect<T extends boolean = true> {
+  label?: T;
+  label_th?: T;
+  slug?: T;
+  desc?: T;
+  desc_th?: T;
+  bakery?: T;
+  beverage?: T;
+  style?: T;
+  image_cover?: T;
+  image_cover_th?: T;
+  image_icon?: T;
+  image_catalogcover?: T;
+  image_store_en?: T;
+  image_store_th?: T;
+  image_recipe?: T;
+  image_gtk?: T;
+  image_gtk_th?: T;
+  lastpagegfx?: T;
+  showonback?: T;
   updatedAt?: T;
   createdAt?: T;
 }

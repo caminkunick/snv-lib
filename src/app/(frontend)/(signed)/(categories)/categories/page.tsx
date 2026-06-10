@@ -1,10 +1,13 @@
+'use server'
+
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { ContentHeader } from '@/components/content.header'
-import { Fab, Snackbar, Tooltip } from '@mui/material'
+import { Fab, List, Tooltip } from '@mui/material'
 import { Add as AddIcon } from '@mui/icons-material'
 import { Category } from '@/payload-types'
-import { GridCat } from './grid.cat'
+import { SnackFab } from '@/components/snack.fab'
+import { EnhanceListItemButton } from './grid.cat'
 
 const PageCategory = async () => {
   const payloadConfig = await config
@@ -13,8 +16,8 @@ const PageCategory = async () => {
   const docs = await payload
     .find({
       collection: 'categories',
-      where: { parent: { equals: null } },
       pagination: false,
+      depth: 0,
     })
     .then((data) => data.docs)
     .catch(() => [] as Category[])
@@ -22,8 +25,14 @@ const PageCategory = async () => {
   return (
     <div>
       <ContentHeader label="Categories" breadcrumbs={[{ label: 'Categories' }]} />
-      <GridCat docs={docs} />
-      <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <List disablePadding>
+        {docs
+          .filter((doc) => !Boolean(doc.parent))
+          .map((doc) => (
+            <EnhanceListItemButton doc={doc} docs={docs} key={doc.id} />
+          ))}
+      </List>
+      <SnackFab>
         <Tooltip title="Create Category" placement="left">
           <Fab
             children={<AddIcon />}
@@ -33,7 +42,7 @@ const PageCategory = async () => {
             target="_blank"
           />
         </Tooltip>
-      </Snackbar>
+      </SnackFab>
     </div>
   )
 }

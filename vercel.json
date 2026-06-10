@@ -3,6 +3,10 @@
     {
       "path": "/api/products/cron",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/product-cats/cron",
+      "schedule": "0 0 * * *"
     }
   ]
 }
