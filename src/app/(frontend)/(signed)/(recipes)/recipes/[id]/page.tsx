@@ -85,8 +85,7 @@ const PageRecipe = async ({
           </Grid>
         )}
         <Grid size={{ xs: 12, md: recipe?.image ? 8 : 12 }}>
-          {/* @ts-ignore */}
-          {content && <RichText content={content} />}
+          {content && <RichText data={content} />}
         </Grid>
       </Grid>
       <Box sx={{ mt: 2 }} />
@@ -142,10 +141,10 @@ const PageRecipe = async ({
               <Chip
                 size="small"
                 key={c.id}
-                label={c.category.name}
+                label={c.category?.name}
                 color="primary"
                 component="a"
-                href={`/categories/${c.category.id}`}
+                href={`/categories/${c.category?.id}`}
                 target="_blank"
               />
             ))}
