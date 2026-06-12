@@ -37,7 +37,7 @@ const PageRecipes = () => {
 
   const fetchRecipes = useCallback(() => {
     setState((prev) => prev.Set('loading', true))
-    fetch(`/api/recipes?page=${page}&limit=${state.limit}`)
+    fetch(`/api/recipes?page=${page}&limit=${state.limit}&sort=title`)
       .then((res) => res.json())
       .then((data) => setState((prev) => new State({ ...prev, ...data, loading: false })))
       .catch((err) => {
