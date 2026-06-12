@@ -14,6 +14,13 @@ export namespace Core {
     typography: {
       fontFamily: '"Kanit", sans-serif',
     },
+    components: {
+      MuiButton: {
+        defaultProps: {
+          disableElevation: true,
+        },
+      },
+    },
   })
 
   export const connect =

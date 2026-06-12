@@ -169,6 +169,35 @@ export const Media: CollectionConfig = {
         }
       },
     },
+    {
+      path: '/image/id/:id',
+      method: 'get',
+      handler: async (req) => {
+        const singlePixel =
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
+        try {
+          let { id } = req.routeParams as { id: string }
+          id = id.replace(/[^0-9]/g, '')
+          if (!id) return Response.json({ error: 'ID is required' }, { status: 400 })
+          const doc = await req.payload.findByID({
+            collection: 'media',
+            id,
+          })
+          if (!doc) throw new Error('Document not found')
+          // if not image
+          if (!doc.mimeType || !doc.mimeType.startsWith('image/')) {
+            throw new Error('Not an image')
+          }
+          if (!doc.firebaseURL) {
+            throw new Error('No Firebase URL available')
+          }
+          return Response.redirect(doc.firebaseURL, 302)
+        } catch (error) {
+          console.error('Error fetching image:', error)
+          return Response.redirect(singlePixel, 302)
+        }
+      },
+    },
   ],
   fields: [
     {
