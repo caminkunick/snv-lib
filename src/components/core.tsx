@@ -20,6 +20,13 @@ export namespace Core {
           disableElevation: true,
         },
       },
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: {
+            color: 'inherit',
+          },
+        },
+      },
     },
   })
 

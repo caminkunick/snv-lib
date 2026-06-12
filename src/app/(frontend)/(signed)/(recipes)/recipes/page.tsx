@@ -6,6 +6,7 @@ import { Box, Button, Fab, MenuItem, Pagination, Select, Tooltip, Typography } f
 import { useCallback, useEffect, useState } from 'react'
 import { GridList } from './grid.list'
 import { SnackFab } from '@/components/snack.fab'
+import { SearchIcon } from './search.panel'
 
 class State {
   loading: boolean = false
@@ -56,6 +57,7 @@ const PageRecipes = () => {
           Recipes
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
+        <SearchIcon />
         <Button
           variant="outlined"
           children={state.isList ? <ListIcon /> : <WindowIcon />}
