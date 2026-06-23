@@ -127,6 +127,38 @@ const PageRecipe = async ({
       </Grid>
       {content && <RichText data={content} />}
       <Box sx={{ mt: 2 }} />
+      <Typography
+        variant="body1"
+        gutterBottom
+        sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+      >
+        Cost
+      </Typography>
+      <Typography variant="caption">
+        {(() => {
+          const snvPrice =
+            recipe?.ingredients.reduce(
+              (total, item) =>
+                total + (item.product?.Get().totalCost(Number(item.quantity) || 0) || 0),
+              0,
+            ) || 0
+          const others = (
+            recipe?.otherIngredients.map(
+              (i) =>
+                ({
+                  id: i.id,
+                  name: i.subIngredient.title,
+                  qty: `${i.quantity} ${i.unit}`,
+                  image: i.subIngredient.image?.thumbnailURL,
+                  cost: i.subIngredient.cost,
+                  totalCost: i.subIngredient.cost * Number(i.quantity || 0),
+                }) as TableRowData,
+            ) || []
+          ).reduce((total, item) => total + Number(item.totalCost), 0)
+          return `Only Synova Products: ${snvPrice} Baht | Total: ${snvPrice + others} Baht`
+        })()}
+      </Typography>
+      <Box sx={{ mt: 2 }} />
       {(recipe?.categories.length || 0) > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography
