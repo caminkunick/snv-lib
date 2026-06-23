@@ -73,6 +73,19 @@ export class Product {
         if (this.cat === 'syrups') {
           return price / 830
         }
+        if (['sauce_topping', 'fruit_based_prep', 'queenofmango'].includes(this.cat)) {
+          return price / 1000
+        }
+        const match = this.size.match(/(\d+)\s*g/i)
+        if (match) {
+          const weight = Number(match[1])
+          return price / weight
+        }
+        const matchKg = this.size.match(/(\d+)\s*kg/i)
+        if (matchKg) {
+          const weight = Number(matchKg[1])
+          return price / (weight * 1000)
+        }
         return 0
       },
       totalCost: (qty: number): number => {

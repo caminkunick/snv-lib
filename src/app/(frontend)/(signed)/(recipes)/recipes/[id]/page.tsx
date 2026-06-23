@@ -68,7 +68,7 @@ const PageRecipe = async ({
         <Chip label="Recipes" component="a" href="/recipes" size="small" />
         <Typography variant="caption" color="text.primary" children={recipe?.title} />
       </Breadcrumbs>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ alignItems: 'center' }}>
         {recipe?.image && (
           <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ width: '100%', aspectRatio: '1 / 1' }}>
@@ -85,48 +85,48 @@ const PageRecipe = async ({
           </Grid>
         )}
         <Grid size={{ xs: 12, md: recipe?.image ? 8 : 12 }}>
-          {content && <RichText data={content} />}
+          <Table
+            rows={([] as TableRowData[]).concat(
+              recipe?.ingredients.map(
+                (i) =>
+                  ({
+                    id: i.id,
+                    name: `${i.product?.name}`.toLocaleLowerCase(),
+                    qty: `${i.quantity} ${i.unit}`,
+                    image: i.product?.image,
+                    cost: i.product?.Get().cost(),
+                    totalCost: i.product?.Get().totalCost(Number(i.quantity || 0)),
+                  }) as TableRowData,
+              ) || [],
+              recipe?.otherIngredients.map(
+                (i) =>
+                  ({
+                    id: i.id,
+                    name: i.subIngredient.title,
+                    qty: `${i.quantity} ${i.unit}`,
+                    image: i.subIngredient.image?.thumbnailURL,
+                    cost: i.subIngredient.cost,
+                    totalCost: i.subIngredient.cost * Number(i.quantity || 0),
+                  }) as TableRowData,
+              ) || [],
+              recipe?.subRecipes.map(
+                (i) =>
+                  ({
+                    id: i.id,
+                    name: i.recipe.title,
+                    qty: `${i.quantity} ${i.unit}`,
+                    image: i.recipe.image?.thumbnailURL,
+                    link: `/recipes/${i.recipe.id}?ref=${recipe?.id}`,
+                    // cost: i.subRecipe.cost,
+                    // totalCost: i.subRecipe.cost * Number(i.quantity || 0),
+                  }) as TableRowData,
+              ) || [],
+            )}
+          />
         </Grid>
       </Grid>
+      {content && <RichText data={content} />}
       <Box sx={{ mt: 2 }} />
-      <Table
-        rows={([] as TableRowData[]).concat(
-          recipe?.ingredients.map(
-            (i) =>
-              ({
-                id: i.id,
-                name: `${i.product?.name}`.toLocaleLowerCase(),
-                qty: `${i.quantity} ${i.unit}`,
-                image: i.product?.image,
-                cost: i.product?.Get().cost(),
-                totalCost: i.product?.Get().totalCost(Number(i.quantity || 0)),
-              }) as TableRowData,
-          ) || [],
-          recipe?.otherIngredients.map(
-            (i) =>
-              ({
-                id: i.id,
-                name: i.subIngredient.title,
-                qty: `${i.quantity} ${i.unit}`,
-                image: i.subIngredient.image?.thumbnailURL,
-                cost: i.subIngredient.cost,
-                totalCost: i.subIngredient.cost * Number(i.quantity || 0),
-              }) as TableRowData,
-          ) || [],
-          recipe?.subRecipes.map(
-            (i) =>
-              ({
-                id: i.id,
-                name: i.recipe.title,
-                qty: `${i.quantity} ${i.unit}`,
-                image: i.recipe.image?.thumbnailURL,
-                link: `/recipes/${i.recipe.id}?ref=${recipe?.id}`,
-                // cost: i.subRecipe.cost,
-                // totalCost: i.subRecipe.cost * Number(i.quantity || 0),
-              }) as TableRowData,
-          ) || [],
-        )}
-      />
       {(recipe?.categories.length || 0) > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography

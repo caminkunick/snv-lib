@@ -1,22 +1,25 @@
 'use client'
 
 import { Category } from '@/payload-types'
-import { Edit, ImageNotSupported, Delete } from '@mui/icons-material'
+import { Edit, ImageNotSupported, Delete, ArrowUpward } from '@mui/icons-material'
 import {
   Avatar,
   Card,
   CardHeader,
+  Collapse,
   Grid,
   IconButton,
   List,
   ListItemAvatar,
   ListItemButton,
   ListItemButtonProps,
+  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
 } from '@mui/material'
 import { styled } from '@mui/material'
 import { usePreCon } from '../../pre.con'
+import { useState } from 'react'
 
 export const GridCat = ({ docs }: { docs: Category[] }) => {
   return docs.length > 0 ? (
@@ -64,6 +67,7 @@ export const EnhanceListItemButton = styled(
   ({ doc, docs, tab = 0, ...props }: EnhanceListItemButtonProps) => {
     const { setState } = usePreCon()
     const children = docs.filter((d) => d.parent === doc.id)
+    const [expanded, setExpanded] = useState(false)
 
     const handleDelete = () =>
       setState((s) =>
@@ -81,7 +85,23 @@ export const EnhanceListItemButton = styled(
 
     return (
       <>
-        <ListItemButton {...props}>
+        <ListItemButton
+          {...props}
+          component={tab === 0 ? 'span' : 'a'}
+          onClick={tab === 0 ? () => setExpanded((e) => !e) : undefined}
+          href={tab !== 0 ? `/categories/${doc.id}` : undefined}
+          target={tab !== 0 ? '_blank' : undefined}
+        >
+          {tab === 0 && (
+            <ListItemIcon>
+              <ArrowUpward
+                sx={{
+                  transition: 'transform 0.2s',
+                  transform: expanded ? 'rotate(180deg)' : 'none',
+                }}
+              />
+            </ListItemIcon>
+          )}
           <ListItemAvatar>
             <Avatar
               variant="square"
@@ -91,11 +111,10 @@ export const EnhanceListItemButton = styled(
           </ListItemAvatar>
           <ListItemText
             primary={doc.name}
+            secondary={children.length > 0 ? `${children.length} subcategories` : null}
             slotProps={{
-              primary: {
-                component: 'a',
-                href: `/categories/${doc.id}`,
-                target: '_blank',
+              secondary: {
+                variant: 'caption',
               },
             }}
           />
@@ -117,11 +136,15 @@ export const EnhanceListItemButton = styled(
           </ListItemSecondaryAction>
         </ListItemButton>
         {children.length > 0 ? (
-          <List disablePadding>
-            {children.map((child) => (
-              <EnhanceListItemButton doc={child} docs={docs} key={child.id} tab={tab + 1} />
-            ))}
-          </List>
+          <Collapse in={expanded}>
+            <List disablePadding>
+              {children
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((child) => (
+                  <EnhanceListItemButton doc={child} docs={docs} key={child.id} tab={tab + 1} />
+                ))}
+            </List>
+          </Collapse>
         ) : null}
       </>
     )
