@@ -137,13 +137,11 @@ const PageRecipe = async ({
       <Typography variant="caption">
         {(() => {
           const snvPrice =
-            Math.round(
-              recipe?.ingredients.reduce(
-                (total, item) =>
-                  total + (item.product?.Get().totalCost(Number(item.quantity) || 0) || 0),
-                0,
-              ) || 0 * 100,
-            ) / 100
+            recipe?.ingredients.reduce(
+              (total, item) =>
+                total + (item.product?.Get().totalCost(Number(item.quantity) || 0) || 0),
+              0,
+            ) || 0
           const others = (
             recipe?.otherIngredients.map(
               (i) =>
@@ -157,7 +155,7 @@ const PageRecipe = async ({
                 }) as TableRowData,
             ) || []
           ).reduce((total, item) => total + Number(item.totalCost), 0)
-          return `Only Synova Products: ${snvPrice} Baht | Total: ${snvPrice + others} Baht`
+          return `Only Synova Products: ${snvPrice.toFixed(2)} Baht | Total: ${(snvPrice + others).toFixed(2)} Baht`
         })()}
       </Typography>
       <Box sx={{ mt: 2 }} />
