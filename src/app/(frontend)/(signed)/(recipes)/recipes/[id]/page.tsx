@@ -137,11 +137,13 @@ const PageRecipe = async ({
       <Typography variant="caption">
         {(() => {
           const snvPrice =
-            recipe?.ingredients.reduce(
-              (total, item) =>
-                total + (item.product?.Get().totalCost(Number(item.quantity) || 0) || 0),
-              0,
-            ) || 0
+            Math.round(
+              recipe?.ingredients.reduce(
+                (total, item) =>
+                  total + (item.product?.Get().totalCost(Number(item.quantity) || 0) || 0),
+                0,
+              ) || 0 * 100,
+            ) / 100
           const others = (
             recipe?.otherIngredients.map(
               (i) =>
