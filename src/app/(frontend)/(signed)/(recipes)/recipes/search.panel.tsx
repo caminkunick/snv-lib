@@ -72,12 +72,14 @@ export const SearchIcon = ({ onSearch }: SearchPanelProps) => {
             },
           },
         }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search fontSize="small" sx={{ color: '#5C635D' }} />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search fontSize="small" sx={{ color: '#5C635D' }} />
+              </InputAdornment>
+            ),
+          },
         }}
       />
       <IconButton
