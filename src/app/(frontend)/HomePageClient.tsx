@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Container,
-  Divider,
   Grid,
   Stack,
   Toolbar,
@@ -68,15 +67,16 @@ const features = [
 
 const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0f0f0f', color: '#fff' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#F7F4EF', color: '#1F2421' }}>
       {/* Navbar */}
       <AppBar
         position="sticky"
         elevation={0}
         sx={{
-          bgcolor: 'rgba(15,15,15,0.85)',
+          bgcolor: 'rgba(247,244,239,0.85)',
           backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid #E7E1D7',
+          color: '#1F2421',
         }}
       >
         <Toolbar sx={{ maxWidth: 1200, width: '100%', mx: 'auto', px: { xs: 2, md: 4 } }}>
@@ -88,7 +88,7 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
             </Box>
           </Typography>
           {user ? (
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mr: 2 }}>
+            <Typography variant="body2" sx={{ color: '#5C635D', mr: 2 }}>
               {user.email}
             </Typography>
           ) : null}
@@ -100,7 +100,7 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
             sx={{
               borderColor: 'primary.main',
               color: 'primary.main',
-              '&:hover': { bgcolor: 'primary.main', color: 'primary.contrastText' },
+              '&:hover': { bgcolor: 'primary.main', color: '#FFFFFF' },
               textTransform: 'none',
               fontWeight: 600,
             }}
@@ -118,35 +118,56 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
           sx={{
             py: { xs: 10, md: 16 },
             textAlign: 'center',
-            background:
-              'linear-gradient(180deg, rgba(var(--mui-palette-primary-mainChannel) / 0.08) 0%, transparent 100%)',
             px: 2,
           }}
         >
-          <LocalBar sx={{ fontSize: 64, color: 'primary.main', mb: 3 }} />
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              bgcolor: 'rgba(255,255,255,0.9)',
+              color: 'primary.main',
+              px: 2,
+              py: 0.75,
+              borderRadius: '999px',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              mb: 3,
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <LocalBar sx={{ fontSize: 18 }} />
+            Beverage Recipe Collection
+          </Box>
           <Typography
             variant="h1"
             sx={{
-              fontWeight: 900,
-              fontSize: { xs: '2.5rem', md: '4rem' },
-              lineHeight: 1.15,
-              textTransform: 'uppercase',
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 400,
+              fontSize: { xs: '2.75rem', md: '4.5rem' },
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              color: '#FFFFFF',
               mb: 2,
+              '& .accent': {
+                fontStyle: 'italic',
+                color: 'primary.main',
+              },
             }}
           >
-            Synova{' '}
-            <Box component="span" sx={{ color: 'primary.main' }}>
-              Library
-            </Box>
+            Synova <span className="accent">Library</span>
           </Typography>
           <Typography
-            variant="h5"
             sx={{
               maxWidth: 560,
               mx: 'auto',
               mb: 4,
-              fontWeight: 400,
+              fontWeight: 300,
               fontSize: { xs: '1rem', md: '1.25rem' },
+              color: 'rgba(255,255,255,0.85)',
             }}
           >
             คลังสูตร Beverage สำหรับทีม Synova — รวบรวมสูตรทุกรายการไว้ในที่เดียว
@@ -159,7 +180,19 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
               variant="contained"
               color="primary"
               size="large"
-              sx={{ fontWeight: 700, px: 4, borderRadius: 2, textTransform: 'none' }}
+              sx={{
+                fontWeight: 700,
+                px: 4,
+                borderRadius: '12px',
+                textTransform: 'none',
+                color: '#FFFFFF',
+                boxShadow: '0 4px 12px rgba(227, 166, 34, 0.3)',
+                '&:hover': {
+                  boxShadow: '0 6px 16px rgba(227, 166, 34, 0.4)',
+                  transform: 'translateY(-1px)',
+                },
+                transition: 'all 0.2s ease',
+              }}
             >
               {user ? 'เข้าสู่คลังสูตร' : 'เข้าสู่ระบบ'}
             </Button>
@@ -169,12 +202,12 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
               variant="outlined"
               size="large"
               sx={{
-                borderColor: 'rgba(255,255,255,0.2)',
-                color: '#fff',
-                '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.05)' },
+                borderColor: 'rgba(255,255,255,0.5)',
+                color: '#FFFFFF',
+                '&:hover': { borderColor: '#FFFFFF', bgcolor: 'rgba(255,255,255,0.1)' },
                 fontWeight: 600,
                 px: 4,
-                borderRadius: 2,
+                borderRadius: '12px',
                 textTransform: 'none',
               }}
             >
@@ -184,40 +217,83 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
         </Box>
       </Hero>
 
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.07)', mx: { xs: 2, md: 8 } }} />
-
       {/* Features */}
       <Container maxWidth="lg" sx={{ py: { xs: 8, md: 12 } }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, textAlign: 'center', mb: 1 }}>
-          ทำไมต้อง Synova Library?
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ textAlign: 'center', color: 'rgba(255,255,255,0.45)', mb: 8 }}
-        >
-          ระบบจัดการสูตรที่ออกแบบมาเพื่อทีม Synova โดยเฉพาะ
-        </Typography>
-        <Grid container spacing={4}>
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Box
+            sx={{
+              display: 'inline-block',
+              bgcolor: 'primary.light',
+              color: 'primary.main',
+              px: 2,
+              py: 0.5,
+              borderRadius: '999px',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              mb: 2,
+            }}
+          >
+            Features
+          </Box>
+          <Typography
+            variant="h4"
+            sx={{
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 400,
+              fontSize: { xs: '2rem', md: '2.75rem' },
+              color: '#1F2421',
+              letterSpacing: '-0.02em',
+              mb: 1,
+              '& .accent': { fontStyle: 'italic', color: 'primary.main' },
+            }}
+          >
+            ทำไมต้อง <span className="accent">Synova Library</span>?
+          </Typography>
+          <Typography sx={{ color: '#5C635D', fontWeight: 300, fontSize: '1.125rem' }}>
+            ระบบจัดการสูตรที่ออกแบบมาเพื่อทีม Synova โดยเฉพาะ
+          </Typography>
+        </Box>
+        <Grid container spacing={3}>
           {features.map((f, i) => (
             <Grid key={i} size={{ xs: 12, sm: 6 }}>
               <Box
                 sx={{
                   p: 4,
-                  borderRadius: 3,
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  bgcolor: 'rgba(255,255,255,0.03)',
+                  borderRadius: '16px',
+                  border: '1px solid #E7E1D7',
+                  bgcolor: '#FFFFFF',
                   height: '100%',
-                  transition: 'border-color 0.2s',
-                  '&:hover': { borderColor: 'primary.main' },
+                  boxShadow: '0 1px 3px rgba(31, 36, 33, 0.04)',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 8px 24px rgba(31, 36, 33, 0.08)',
+                  },
                 }}
               >
-                <Box sx={{ mb: 2 }}>{f.icon}</Box>
-                <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                <Box
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: '12px',
+                    bgcolor: 'primary.light',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2.5,
+                  }}
+                >
+                  {f.icon}
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: '#1F2421', mb: 1 }}>
                   {f.title}
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.8 }}
+                  sx={{ color: '#5C635D', lineHeight: 1.8, fontWeight: 300 }}
                 >
                   {f.desc}
                 </Typography>
@@ -233,21 +309,39 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
           mx: { xs: 2, md: 8 },
           mb: { xs: 8, md: 12 },
           p: { xs: 4, md: 6 },
-          borderRadius: 4,
-          background: (theme) =>
-            `linear-gradient(135deg, ${theme.palette.primary.main}22 0%, ${theme.palette.primary.main}08 100%)`,
-          border: (theme) => `1px solid ${theme.palette.primary.main}44`,
+          borderRadius: '24px',
+          bgcolor: '#FFFFFF',
+          border: '1px solid #E7E1D7',
+          boxShadow: '0 1px 3px rgba(31, 36, 33, 0.04)',
           textAlign: 'center',
         }}
       >
-        <Lock sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+        <Box
+          sx={{
+            width: 72,
+            height: 72,
+            borderRadius: '50%',
+            bgcolor: 'primary.light',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mb: 2.5,
+          }}
+        >
+          <Lock sx={{ fontSize: 32, color: 'primary.main' }} />
+        </Box>
+        <Typography
+          variant="h5"
+          sx={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 400,
+            color: '#1F2421',
+            mb: 1,
+          }}
+        >
           เนื้อหาสงวนสำหรับสมาชิก
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: 'rgba(255,255,255,0.55)', mb: 3, maxWidth: 480, mx: 'auto' }}
-        >
+        <Typography sx={{ color: '#5C635D', mb: 3, maxWidth: 480, mx: 'auto', fontWeight: 300 }}>
           สูตรทั้งหมดในระบบเข้าถึงได้เฉพาะผู้ใช้งานที่ได้รับสิทธิ์จากทีม Synova เท่านั้น
           หากต้องการสิทธิ์การเข้าถึง กรุณาติดต่อผู้ดูแลระบบ
         </Typography>
@@ -256,7 +350,19 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
           target="_blank"
           variant="contained"
           color="primary"
-          sx={{ fontWeight: 700, px: 4, borderRadius: 2, textTransform: 'none' }}
+          sx={{
+            fontWeight: 700,
+            px: 4,
+            borderRadius: '12px',
+            textTransform: 'none',
+            color: '#FFFFFF',
+            boxShadow: '0 4px 12px rgba(227, 166, 34, 0.3)',
+            '&:hover': {
+              boxShadow: '0 6px 16px rgba(227, 166, 34, 0.4)',
+              transform: 'translateY(-1px)',
+            },
+            transition: 'all 0.2s ease',
+          }}
         >
           {user ? 'เข้าสู่คลังสูตร' : 'เข้าสู่ระบบ'}
         </Button>
@@ -266,10 +372,10 @@ const HomePageClient = Core.connect()(({ user, adminUrl }: Props) => {
       <Box
         component="footer"
         sx={{
-          borderTop: '1px solid rgba(255,255,255,0.07)',
+          borderTop: '1px solid #E7E1D7',
           py: 3,
           textAlign: 'center',
-          color: 'rgba(255,255,255,0.3)',
+          color: '#5C635D',
         }}
       >
         <Typography variant="caption" suppressHydrationWarning>

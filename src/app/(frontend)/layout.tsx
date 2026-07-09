@@ -14,7 +14,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <AppRouterCacheProvider>
+        <AppRouterCacheProvider options={{ key: 'mui' }}>
           <main>{children}</main>
         </AppRouterCacheProvider>
       </body>
