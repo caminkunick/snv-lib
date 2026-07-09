@@ -41,43 +41,132 @@ export const Table = ({
 }) => (
   <>
     <TableContainer>
-      <MuiTable>
+      <MuiTable
+        sx={{
+          '& td, & th': { borderColor: 'divider' },
+        }}
+      >
         <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell width="360">Ingredient</TableCell>
-            <TableCell align="center">Qty</TableCell>
-            <TableCell align="center">Cost</TableCell>
-            <TableCell align="center">Total Cost</TableCell>
+          <TableRow sx={{ bgcolor: 'action.hover' }}>
+            <TableCell sx={{ width: 56 }} />
+            <TableCell
+              sx={{
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontSize: 12,
+                letterSpacing: '0.05em',
+                color: 'text.secondary',
+              }}
+            >
+              Ingredient
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontSize: 12,
+                letterSpacing: '0.05em',
+                color: 'text.secondary',
+              }}
+            >
+              Qty
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontSize: 12,
+                letterSpacing: '0.05em',
+                color: 'text.secondary',
+              }}
+            >
+              Cost
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontSize: 12,
+                letterSpacing: '0.05em',
+                color: 'text.secondary',
+              }}
+            >
+              Total
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell></TableCell>
-              <TableCell sx={{ textTransform: 'capitalize' }}>
+            <TableRow
+              key={index}
+              sx={{
+                transition: 'background-color 0.15s',
+                '&:hover': { bgcolor: 'action.hover' },
+                '&:last-of-type td': { borderBottom: 'none' },
+              }}
+            >
+              <TableCell>
+                <Avatar
+                  variant="rounded"
+                  src={row.image}
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    bgcolor: 'action.selected',
+                    color: 'text.disabled',
+                    img: { objectFit: 'contain' },
+                  }}
+                >
+                  <HideImageIcon fontSize="small" />
+                </Avatar>
+              </TableCell>
+              <TableCell sx={{ textTransform: 'capitalize', fontWeight: 500 }}>
                 {row.link ? (
-                  <Link href={row.link} target="_blank">
+                  <Link href={row.link} target="_blank" underline="hover">
                     {row.name}
                   </Link>
                 ) : (
                   row.name
                 )}
               </TableCell>
-              <TableCell>{row.qty}</TableCell>
-              <TableCell align="right">{maxFixed(row.cost)}</TableCell>
-              <TableCell align="right">{maxFixed(row.totalCost)}</TableCell>
+              <TableCell align="right" sx={{ whiteSpace: 'nowrap', color: 'text.secondary' }}>
+                {row.qty}
+              </TableCell>
+              <TableCell align="right" sx={{ color: 'text.secondary' }}>
+                {maxFixed(row.cost)}
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600 }}>
+                {maxFixed(row.totalCost)}
+              </TableCell>
             </TableRow>
           ))}
-          <TableRow>
-            <TableCell colSpan={4}>Only Synova Products</TableCell>
-            <TableCell align="right" sx={{ fontSize: 24, fontWeight: 'bold' }}>
+          <TableRow sx={{ bgcolor: 'action.hover' }}>
+            <TableCell colSpan={4} sx={{ fontWeight: 500, color: 'text.secondary' }}>
+              Only Synova Products
+            </TableCell>
+            <TableCell align="right" sx={{ fontSize: 20, fontWeight: 700 }}>
               {maxFixed(snvSum)}
             </TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell colSpan={4}>Total</TableCell>
-            <TableCell align="right" sx={{ fontSize: 24, fontWeight: 'bold' }}>
+          <TableRow sx={{ bgcolor: 'primary.main', '& td': { borderBottom: 'none' } }}>
+            <TableCell
+              colSpan={4}
+              sx={{
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'primary.contrastText',
+              }}
+            >
+              Total
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{ fontSize: 26, fontWeight: 800, color: 'primary.contrastText' }}
+            >
               {maxFixed(total)}
             </TableCell>
           </TableRow>

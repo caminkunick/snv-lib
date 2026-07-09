@@ -105,66 +105,136 @@ const PageRecipe = async ({
   const totalPrice = Number((snvPrice + othersPrice).toFixed(2))
 
   return (
-    <div>
+    <Box sx={{ pb: 8 }}>
       <Button
-        variant="outlined"
+        variant="text"
         LinkComponent="a"
         href={resolvedParams?.ref ? `/recipes/${resolvedParams.ref}` : `/recipes`}
         children="Back"
         size="small"
         startIcon={<ChevronLeftIcon />}
-        sx={{ mb: 1 }}
+        sx={{ mb: 2, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
       />
-      <Typography
-        variant="h4"
-        children={recipe?.title}
+
+      <Box
         sx={{
-          textTransform: 'capitalize',
-          fontWeight: 'bold',
+          mb: 4,
+          pb: 3,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
         }}
-      />
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-        <Chip label="Recipes" component="a" href="/recipes" size="small" />
-        <Typography variant="caption" color="text.primary" children={recipe?.title} />
-      </Breadcrumbs>
-      <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
+      >
+        <Typography
+          variant="h3"
+          children={recipe?.title}
+          sx={{
+            textTransform: 'capitalize',
+            fontWeight: 800,
+            lineHeight: 1.15,
+            letterSpacing: '-0.02em',
+          }}
+        />
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mt: 1.5 }}>
+          <Chip
+            label="Recipes"
+            component="a"
+            href="/recipes"
+            size="small"
+            clickable
+            variant="outlined"
+          />
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ textTransform: 'capitalize' }}
+            children={recipe?.title}
+          />
+        </Breadcrumbs>
+      </Box>
+
+      <Grid container spacing={4} sx={{ alignItems: 'flex-start' }}>
         {recipe?.image && (
           <Grid size={{ xs: 12, md: 4 }}>
-            <Box sx={{ width: '100%', aspectRatio: '1 / 1' }}>
+            <Box
+              sx={{
+                position: { md: 'sticky' },
+                top: { md: 88 },
+                width: '100%',
+                aspectRatio: '1 / 1',
+                borderRadius: 4,
+                overflow: 'hidden',
+                boxShadow: 4,
+              }}
+            >
               <Avatar
                 variant="square"
                 src={recipe.image.firebaseURL}
                 sx={{
                   width: '100%',
                   height: '100%',
-                  borderRadius: 4,
                 }}
               />
             </Box>
           </Grid>
         )}
         <Grid size={{ xs: 12, md: recipe?.image ? 8 : 12 }}>
-          <Table rows={tableRows} snvSum={snvPrice} total={totalPrice} />
+          <Box
+            sx={{
+              borderRadius: 4,
+              border: '1px solid',
+              borderColor: 'divider',
+              overflow: 'hidden',
+              bgcolor: 'background.paper',
+              boxShadow: 1,
+            }}
+          >
+            <Table rows={tableRows} snvSum={snvPrice} total={totalPrice} />
+          </Box>
         </Grid>
       </Grid>
-      {content && <RichText data={content} />}
-      <Box sx={{ mt: 2 }} />
-      {(recipe?.categories.length || 0) > 0 && (
-        <Box sx={{ mt: 4 }}>
+
+      {content && (
+        <Box
+          sx={{
+            mt: 5,
+            p: { xs: 3, md: 4 },
+            borderRadius: 4,
+            bgcolor: 'action.hover',
+            '& h1, & h2, & h3': { fontWeight: 700 },
+          }}
+        >
           <Typography
-            variant="body1"
+            variant="overline"
+            color="primary"
+            sx={{ fontWeight: 700, letterSpacing: '0.08em' }}
+          >
+            Method
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <RichText data={content} />
+          </Box>
+        </Box>
+      )}
+
+      {(recipe?.categories.length || 0) > 0 && (
+        <Box sx={{ mt: 5 }}>
+          <Typography
+            variant="overline"
+            color="text.secondary"
             gutterBottom
-            sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+            sx={{ fontWeight: 700, letterSpacing: '0.08em' }}
           >
             Categories
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 0.5 }}>
             {recipe?.categories.map((c) => (
               <Chip
                 size="small"
                 key={c.id}
                 label={c.category?.name}
                 color="primary"
+                variant="outlined"
+                clickable
                 component="a"
                 href={`/categories/${c.category?.id}`}
                 target="_blank"
@@ -173,6 +243,7 @@ const PageRecipe = async ({
           </Box>
         </Box>
       )}
+
       <SnackFab>
         <Fab
           children={<EditIcon />}
@@ -182,7 +253,7 @@ const PageRecipe = async ({
           target="_blank"
         />
       </SnackFab>
-    </div>
+    </Box>
   )
 }
 
