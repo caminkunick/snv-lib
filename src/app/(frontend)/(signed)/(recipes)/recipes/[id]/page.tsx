@@ -11,6 +11,7 @@ import { Product } from '@/libs/products'
 import { Avatar, Box, Breadcrumbs, Button, Chip, Fab, Grid, Typography } from '@mui/material'
 import { Edit as EditIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material'
 import { SnackFab } from '@/components/snack.fab'
+import configPromise from '@payload-config'
 
 const PageRecipe = async ({
   params,
@@ -183,6 +184,16 @@ const PageRecipe = async ({
       </SnackFab>
     </div>
   )
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const res = await payload.find({
+    collection: 'recipes',
+    pagination: false,
+    select: {},
+  })
+  return res.docs.map((doc) => ({ id: String(doc.id) }))
 }
 
 export default PageRecipe

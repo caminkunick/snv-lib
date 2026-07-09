@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 
 export const Recipes: CollectionConfig = {
@@ -197,4 +198,13 @@ export const Recipes: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [
+      (req) => {
+        if (req.doc?.id) {
+          revalidatePath(`/recipes/${req.doc?.id}`)
+        }
+      },
+    ],
+  },
 }
