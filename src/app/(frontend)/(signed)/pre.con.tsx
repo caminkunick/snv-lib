@@ -53,7 +53,7 @@ export const PreCon = ({ children, user }: { children: React.ReactNode; user: Us
   return (
     <Context.Provider value={{ state, setState }}>
       <ThemeProvider theme={Core.theme}>
-        <AppBar position="sticky" elevation={0}>
+        <AppBar position="sticky" elevation={3} color="default">
           <Toolbar>
             <IconButton
               edge="start"

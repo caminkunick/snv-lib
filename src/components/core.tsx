@@ -6,7 +6,7 @@ import { ComponentType } from 'react'
 export namespace Core {
   export const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: 'light',
       primary: {
         main: '#e3a622',
       },
